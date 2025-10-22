@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ModeToggle } from "@/components/mode-toggle"
 import { BottomNavigation } from "@/components/ui/bottom-navigation"
+import { HomeView } from "@/components/home-view"
 import Image from "next/image"
 
 interface MainLayoutProps {
@@ -15,29 +16,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   const renderContent = () => {
     switch (activeTab) {
       case "home":
-        return (
-          <div className="slide-up">
-            <section className="prose mx-auto max-w-none text-center sm:text-left">
-              <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Welcome</h2>
-              <p className="text-zinc-600 dark:text-zinc-400">This app is mobile-first and includes a bottom navigation bar. Use the buttons below to explore.</p>
-            </section>
-
-            <section className="mt-6 grid gap-3">
-              <button 
-                onClick={() => setActiveTab("forms")}
-                className="rounded-lg bg-white/60 p-4 shadow-sm dark:bg-neutral-900/60 text-left hover:bg-white/80 dark:hover:bg-neutral-900/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Open Forms
-              </button>
-              <button 
-                onClick={() => setActiveTab("settings")}
-                className="rounded-lg bg-white/60 p-4 shadow-sm dark:bg-neutral-900/60 text-left hover:bg-white/80 dark:hover:bg-neutral-900/80 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Open Settings
-              </button>
-            </section>
-          </div>
-        )
+        return <HomeView onNavigate={setActiveTab} />
       case "forms":
         return (
           <div className="slide-up">
