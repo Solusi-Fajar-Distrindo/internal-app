@@ -1,12 +1,15 @@
 "use client"
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
 
 interface HomeViewProps {
-  onNavigate: (tab: string) => void
+  onNavigate?: (tab: string) => void
 }
 
 export function HomeView({ onNavigate }: HomeViewProps) {
+  const router = useRouter()
+
   return (
     <div className="slide-up">
       <section className="prose mx-auto max-w-none text-center sm:text-left">
@@ -15,11 +18,17 @@ export function HomeView({ onNavigate }: HomeViewProps) {
       </section>
 
       <section className="mt-6 grid gap-3">
-        <Card className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]">
+        <Card
+          className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+          onClick={() => router.push("/forms")}
+        >
           <CardHeader>
-            <CardTitle>Marketing - Aktivitas Harian</CardTitle>
-            <CardDescription>Absensi aktivitas harian. Klik untuk melanjutkan ke form absensi</CardDescription>
+            <CardTitle>Aktivitas Harian</CardTitle>
+            <CardDescription>Absensi aktivitas harian</CardDescription>
           </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">Klik untuk melanjutkan ke form absensi</p>
+          </CardContent>
         </Card>
       </section>
     </div>
