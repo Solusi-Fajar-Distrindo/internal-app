@@ -70,14 +70,16 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black font-sans">
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent px-4 py-3 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <Image src="/next.svg" alt="logo" width={28} height={6} className="dark:invert" />
-          <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
+        <div className="mx-auto flex max-w-lg w-full items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Image src="/next.svg" alt="logo" width={28} height={6} className="dark:invert" />
+            <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
+          </div>
+          <ModeToggle />
         </div>
-        <ModeToggle />
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 pb-28 pt-6 sm:pt-32 sm:pb-28">
+      <main className="mx-auto max-w-lg px-4 pb-28 pt-6 sm:pt-32 sm:pb-28">
         {renderContent()}
       </main>
 
