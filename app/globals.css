@@ -119,6 +119,25 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Smooth theme transitions */
+  * {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease, 
+                box-shadow 0.3s ease,
+                opacity 0.3s ease !important;
+  }
+  
+  /* Exclude specific elements from transitions for better performance */
+  .no-transition,
+  .no-transition *,
+  img,
+  video,
+  canvas,
+  svg {
+    transition: none !important;
+  }
 }
 
 @layer utilities {
