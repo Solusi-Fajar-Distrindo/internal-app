@@ -9,15 +9,8 @@
 
 <!--
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
+  Each user story/journey must be INDEPENDENTLY VALIDATED manually — automated tests
+  are prohibited by the constitution.
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -26,9 +19,9 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Manual Validation**: [Describe how reviewers must manually verify this story]
 
-**Acceptance Scenarios**:
+**Acceptance Scenarios (Manual)**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 2. **Given** [initial state], **When** [action], **Then** [expected outcome]
@@ -41,9 +34,9 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Manual Validation**: [Describe manual walkthrough steps]
 
-**Acceptance Scenarios**:
+**Acceptance Scenarios (Manual)**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
@@ -55,9 +48,9 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Manual Validation**: [Describe manual walkthrough steps]
 
-**Acceptance Scenarios**:
+**Acceptance Scenarios (Manual)**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
@@ -67,33 +60,23 @@
 
 ### Edge Cases
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: Implementation MUST follow Clean Code Discipline (TypeScript types, accessibility, readability).
+- **FR-002**: UI MUST use `shadcn/ui` components styled with Tailwind CSS v4 tokens.
+- **FR-003**: Experience MUST provide responsive layouts (320px–desktop) and PWA compliance.
+- **FR-004**: Manual validation steps MUST be documented for each user journey; no automated tests allowed.
+- **FR-005**: Features MUST avoid introducing new runtime dependencies without RFC approval.
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -102,14 +85,9 @@
 
 ## Success Criteria *(mandatory)*
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: Manual UX walkthrough completes without blockers in under [time] minutes.
+- **SC-002**: UI remains accessible (WCAG 2.2 AA) across supported breakpoints.
+- **SC-003**: PWA install prompt remains available after feature deployment.
+- **SC-004**: No new runtime dependencies are added to `package.json`.
