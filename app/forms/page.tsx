@@ -18,6 +18,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { ChevronDownIcon, ChevronRightIcon } from "lucide-react"
 
 export default function FormsPage() {
   const router = useRouter()
@@ -37,6 +43,14 @@ export default function FormsPage() {
     produk: "",
     ringkasan: "",
     nextAction: ""
+  })
+  const [openSections, setOpenSections] = useState({
+    identitas: true,
+    outlet: true,
+    kategori: true,
+    produk: true,
+    ringkasan: true,
+    nextAction: true
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,230 +84,326 @@ export default function FormsPage() {
             <CardDescription>Isi form absensi aktivitas harian marketing</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Identitas dan Waktu</h3>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    disabled
-                    className="bg-muted"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="nama">Nama</Label>
-                  <Input
-                    id="nama"
-                    type="text"
-                    placeholder="Masukkan nama lengkap"
-                    value={formData.nama}
-                    onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="area">Area</Label>
-                  <Input
-                    id="area"
-                    type="text"
-                    placeholder="Masukkan area kerja"
-                    value={formData.area}
-                    onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Tanggal Kegiatan</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal"
-                      >
-                        {selectedDate ? (
-                          format(selectedDate, "dd/MM/yyyy", { locale: id })
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <Collapsible open={openSections.identitas} onOpenChange={(open) => setOpenSections({ ...openSections, identitas: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50  transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Identitas dan Waktu</CardTitle>
+                        {openSections.identitas ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
-                          <span>Pilih tanggal</span>
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
                         )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        locale={id}
-                        className="rounded-md"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </div>
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          disabled
+                          className="bg-muted"
+                        />
+                      </div>
 
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Info Outlet/Kunjungan</h3>
+                      <div className="space-y-2">
+                        <Label htmlFor="nama">Nama</Label>
+                        <Input
+                          id="nama"
+                          type="text"
+                          placeholder="Masukkan nama lengkap"
+                          value={formData.nama}
+                          onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="jenisOutlet">Jenis Outlet</Label>
-                  <Select value={formData.jenisOutlet} onValueChange={(value) => setFormData({ ...formData, jenisOutlet: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih jenis outlet" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="RS">RS</SelectItem>
-                      <SelectItem value="Klinik">Klinik</SelectItem>
-                      <SelectItem value="Apotek">Apotek</SelectItem>
-                      <SelectItem value="PT">PT</SelectItem>
-                      <SelectItem value="lainnya">Lainnya</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="area">Area</Label>
+                        <Input
+                          id="area"
+                          type="text"
+                          placeholder="Masukkan area kerja"
+                          value={formData.area}
+                          onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="namaOutlet">Nama Outlet (RS/PT)</Label>
-                  <Input
-                    id="namaOutlet"
-                    type="text"
-                    placeholder="Masukkan nama outlet"
-                    value={formData.namaOutlet}
-                    onChange={(e) => setFormData({ ...formData, namaOutlet: e.target.value })}
-                    required
-                  />
-                </div>
+                      <div className="space-y-2">
+                        <Label>Tanggal Kegiatan</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="w-full justify-start text-left font-normal"
+                            >
+                              {selectedDate ? (
+                                format(selectedDate, "dd/MM/yyyy", { locale: id })
+                              ) : (
+                                <span>Pilih tanggal</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={selectedDate}
+                              onSelect={setSelectedDate}
+                              locale={id}
+                              className="rounded-md"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-                <div className="space-y-2">
-                  <Label htmlFor="kota">Kota/Kabupaten</Label>
-                  <Input
-                    id="kota"
-                    type="text"
-                    placeholder="Masukkan kota/kabupaten"
-                    value={formData.kota}
-                    onChange={(e) => setFormData({ ...formData, kota: e.target.value })}
-                    required
-                  />
-                </div>
+              <Collapsible open={openSections.outlet} onOpenChange={(open) => setOpenSections({ ...openSections, outlet: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Info Outlet/Kunjungan</CardTitle>
+                        {openSections.outlet ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
+                        )}
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="jenisOutlet">Jenis Outlet</Label>
+                        <Select value={formData.jenisOutlet} onValueChange={(value) => setFormData({ ...formData, jenisOutlet: value })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pilih jenis outlet" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="RS">RS</SelectItem>
+                            <SelectItem value="Klinik">Klinik</SelectItem>
+                            <SelectItem value="Apotek">Apotek</SelectItem>
+                            <SelectItem value="PT">PT</SelectItem>
+                            <SelectItem value="lainnya">Lainnya</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="pic">PIC yang Ditemui</Label>
-                  <Input
-                    id="pic"
-                    type="text"
-                    placeholder="Masukkan nama PIC"
-                    value={formData.pic}
-                    onChange={(e) => setFormData({ ...formData, pic: e.target.value })}
-                    required
-                  />
-                </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="namaOutlet">Nama Outlet (RS/PT)</Label>
+                        <Input
+                          id="namaOutlet"
+                          type="text"
+                          placeholder="Masukkan nama outlet"
+                          value={formData.namaOutlet}
+                          onChange={(e) => setFormData({ ...formData, namaOutlet: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="jabatanPic">Jabatan/Departemen PIC</Label>
-                  <Input
-                    id="jabatanPic"
-                    type="text"
-                    placeholder="Masukkan jabatan/departemen PIC"
-                    value={formData.jabatanPic}
-                    onChange={(e) => setFormData({ ...formData, jabatanPic: e.target.value })}
-                    required
-                  />
-                </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="kota">Kota/Kabupaten</Label>
+                        <Input
+                          id="kota"
+                          type="text"
+                          placeholder="Masukkan kota/kabupaten"
+                          value={formData.kota}
+                          onChange={(e) => setFormData({ ...formData, kota: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="hpPic">Nomor HP PIC</Label>
-                  <Input
-                    id="hpPic"
-                    type="text"
-                    placeholder="Masukkan nomor HP PIC"
-                    value={formData.hpPic}
-                    onChange={(e) => setFormData({ ...formData, hpPic: e.target.value })}
-                    required
-                  />
-                </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="pic">PIC yang Ditemui</Label>
+                        <Input
+                          id="pic"
+                          type="text"
+                          placeholder="Masukkan nama PIC"
+                          value={formData.pic}
+                          onChange={(e) => setFormData({ ...formData, pic: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="emailPic">Email PIC</Label>
-                  <Input
-                    id="emailPic"
-                    type="email"
-                    placeholder="Masukkan email PIC"
-                    value={formData.emailPic}
-                    onChange={(e) => setFormData({ ...formData, emailPic: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="jabatanPic">Jabatan/Departemen PIC</Label>
+                        <Input
+                          id="jabatanPic"
+                          type="text"
+                          placeholder="Masukkan jabatan/departemen PIC"
+                          value={formData.jabatanPic}
+                          onChange={(e) => setFormData({ ...formData, jabatanPic: e.target.value })}
+                          required
+                        />
+                      </div>
 
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Kategori Aktivitas</h3>
+                      <div className="space-y-2">
+                        <Label htmlFor="hpPic">Nomor HP PIC</Label>
+                        <Input
+                          id="hpPic"
+                          type="text"
+                          placeholder="Masukkan nomor HP PIC"
+                          value={formData.hpPic}
+                          onChange={(e) => setFormData({ ...formData, hpPic: e.target.value })}
+                          required
+                        />
+                      </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="kategori">Kategori</Label>
-                  <Input
-                    id="kategori"
-                    type="text"
-                    placeholder="Masukkan kategori aktivitas"
-                    value={formData.kategori}
-                    onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="emailPic">Email PIC</Label>
+                        <Input
+                          id="emailPic"
+                          type="email"
+                          placeholder="Masukkan email PIC"
+                          value={formData.emailPic}
+                          onChange={(e) => setFormData({ ...formData, emailPic: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Produk/Segmen</h3>
+              <Collapsible open={openSections.kategori} onOpenChange={(open) => setOpenSections({ ...openSections, kategori: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Kategori Aktivitas</CardTitle>
+                        {openSections.kategori ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
+                        )}
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="kategori">Kategori</Label>
+                        <Input
+                          id="kategori"
+                          type="text"
+                          placeholder="Masukkan kategori aktivitas"
+                          value={formData.kategori}
+                          onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-                <div className="space-y-2">
-                  <Label htmlFor="produk">Produk atau Segmen</Label>
-                  <Input
-                    id="produk"
-                    type="text"
-                    placeholder="Masukkan produk atau segmen"
-                    value={formData.produk}
-                    onChange={(e) => setFormData({ ...formData, produk: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
+              <Collapsible open={openSections.produk} onOpenChange={(open) => setOpenSections({ ...openSections, produk: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Produk/Segmen</CardTitle>
+                        {openSections.produk ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
+                        )}
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="produk">Produk atau Segmen</Label>
+                        <Input
+                          id="produk"
+                          type="text"
+                          placeholder="Masukkan produk atau segmen"
+                          value={formData.produk}
+                          onChange={(e) => setFormData({ ...formData, produk: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Ringkasan & Hasil</h3>
+              <Collapsible open={openSections.ringkasan} onOpenChange={(open) => setOpenSections({ ...openSections, ringkasan: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Ringkasan & Hasil</CardTitle>
+                        {openSections.ringkasan ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
+                        )}
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="ringkasan">Ringkasan Aktivitas</Label>
+                        <Input
+                          id="ringkasan"
+                          type="text"
+                          placeholder="Masukkan ringkasan aktivitas dan hasil"
+                          value={formData.ringkasan}
+                          onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-                <div className="space-y-2">
-                  <Label htmlFor="ringkasan">Ringkasan Aktivitas</Label>
-                  <Input
-                    id="ringkasan"
-                    type="text"
-                    placeholder="Masukkan ringkasan aktivitas dan hasil"
-                    value={formData.ringkasan}
-                    onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
+              <Collapsible open={openSections.nextAction} onOpenChange={(open) => setOpenSections({ ...openSections, nextAction: open })}>
+                <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+                  <CollapsibleTrigger asChild>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">Next Action</CardTitle>
+                        {openSections.nextAction ? (
+                          <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 transition-transform duration-300" />
+                        )}
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-4 pt-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="nextAction">Tindakan Lanjutan</Label>
+                        <Input
+                          id="nextAction"
+                          type="text"
+                          placeholder="Masukkan tindakan lanjutan"
+                          value={formData.nextAction}
+                          onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
 
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold">Next Action</h3>
-
-                <div className="space-y-2">
-                  <Label htmlFor="nextAction">Tindakan Lanjutan</Label>
-                  <Input
-                    id="nextAction"
-                    type="text"
-                    placeholder="Masukkan tindakan lanjutan"
-                    value={formData.nextAction}
-                    onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })}
-                    required
-                  />
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full cursor-pointer">
                 Submit Absensi
               </Button>
             </form>
