@@ -11,6 +11,13 @@ import { ChevronLeftIcon } from "lucide-react"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function FormsPage() {
   const router = useRouter()
@@ -18,7 +25,18 @@ export default function FormsPage() {
   const [formData, setFormData] = useState({
     email: "user@example.com",
     nama: "",
-    area: ""
+    area: "",
+    jenisOutlet: "",
+    namaOutlet: "",
+    kota: "",
+    pic: "",
+    jabatanPic: "",
+    hpPic: "",
+    emailPic: "",
+    kategori: "",
+    produk: "",
+    ringkasan: "",
+    nextAction: ""
   })
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,67 +70,227 @@ export default function FormsPage() {
             <CardDescription>Isi form absensi aktivitas harian marketing</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  disabled
-                  className="bg-muted"
-                />
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Identitas dan Waktu</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    disabled
+                    className="bg-muted"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="nama">Nama</Label>
+                  <Input
+                    id="nama"
+                    type="text"
+                    placeholder="Masukkan nama lengkap"
+                    value={formData.nama}
+                    onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="area">Area</Label>
+                  <Input
+                    id="area"
+                    type="text"
+                    placeholder="Masukkan area kerja"
+                    value={formData.area}
+                    onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tanggal Kegiatan</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left font-normal"
+                      >
+                        {selectedDate ? (
+                          format(selectedDate, "dd/MM/yyyy", { locale: id })
+                        ) : (
+                          <span>Pilih tanggal</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        locale={id}
+                        className="rounded-md"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="nama">Nama</Label>
-                <Input
-                  id="nama"
-                  type="text"
-                  placeholder="Masukkan nama lengkap"
-                  value={formData.nama}
-                  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                  required
-                />
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Info Outlet/Kunjungan</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="jenisOutlet">Jenis Outlet</Label>
+                  <Select value={formData.jenisOutlet} onValueChange={(value) => setFormData({ ...formData, jenisOutlet: value })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih jenis outlet" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="RS">RS</SelectItem>
+                      <SelectItem value="Klinik">Klinik</SelectItem>
+                      <SelectItem value="Apotek">Apotek</SelectItem>
+                      <SelectItem value="PT">PT</SelectItem>
+                      <SelectItem value="lainnya">Lainnya</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="namaOutlet">Nama Outlet (RS/PT)</Label>
+                  <Input
+                    id="namaOutlet"
+                    type="text"
+                    placeholder="Masukkan nama outlet"
+                    value={formData.namaOutlet}
+                    onChange={(e) => setFormData({ ...formData, namaOutlet: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="kota">Kota/Kabupaten</Label>
+                  <Input
+                    id="kota"
+                    type="text"
+                    placeholder="Masukkan kota/kabupaten"
+                    value={formData.kota}
+                    onChange={(e) => setFormData({ ...formData, kota: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pic">PIC yang Ditemui</Label>
+                  <Input
+                    id="pic"
+                    type="text"
+                    placeholder="Masukkan nama PIC"
+                    value={formData.pic}
+                    onChange={(e) => setFormData({ ...formData, pic: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="jabatanPic">Jabatan/Departemen PIC</Label>
+                  <Input
+                    id="jabatanPic"
+                    type="text"
+                    placeholder="Masukkan jabatan/departemen PIC"
+                    value={formData.jabatanPic}
+                    onChange={(e) => setFormData({ ...formData, jabatanPic: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="hpPic">Nomor HP PIC</Label>
+                  <Input
+                    id="hpPic"
+                    type="text"
+                    placeholder="Masukkan nomor HP PIC"
+                    value={formData.hpPic}
+                    onChange={(e) => setFormData({ ...formData, hpPic: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emailPic">Email PIC</Label>
+                  <Input
+                    id="emailPic"
+                    type="email"
+                    placeholder="Masukkan email PIC"
+                    value={formData.emailPic}
+                    onChange={(e) => setFormData({ ...formData, emailPic: e.target.value })}
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="area">Area</Label>
-                <Input
-                  id="area"
-                  type="text"
-                  placeholder="Masukkan area kerja"
-                  value={formData.area}
-                  onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                  required
-                />
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Kategori Aktivitas</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="kategori">Kategori</Label>
+                  <Input
+                    id="kategori"
+                    type="text"
+                    placeholder="Masukkan kategori aktivitas"
+                    value={formData.kategori}
+                    onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Tanggal Kegiatan</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left font-normal"
-                    >
-                      {selectedDate ? (
-                        format(selectedDate, "dd/MM/yyyy", { locale: id })
-                      ) : (
-                        <span>Pilih tanggal</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
-                      locale={id}
-                      className="rounded-md"
-                    />
-                  </PopoverContent>
-                </Popover>
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Produk/Segmen</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="produk">Produk atau Segmen</Label>
+                  <Input
+                    id="produk"
+                    type="text"
+                    placeholder="Masukkan produk atau segmen"
+                    value={formData.produk}
+                    onChange={(e) => setFormData({ ...formData, produk: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Ringkasan & Hasil</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ringkasan">Ringkasan Aktivitas</Label>
+                  <Input
+                    id="ringkasan"
+                    type="text"
+                    placeholder="Masukkan ringkasan aktivitas dan hasil"
+                    value={formData.ringkasan}
+                    onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Next Action</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="nextAction">Tindakan Lanjutan</Label>
+                  <Input
+                    id="nextAction"
+                    type="text"
+                    placeholder="Masukkan tindakan lanjutan"
+                    value={formData.nextAction}
+                    onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })}
+                    required
+                  />
+                </div>
               </div>
 
               <Button type="submit" className="w-full">
