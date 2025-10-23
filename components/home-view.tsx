@@ -13,8 +13,8 @@ export function HomeView({ onNavigate }: HomeViewProps) {
   return (
     <div className="slide-up">
       <section className="prose mx-auto max-w-none text-center sm:text-left">
-        <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Selamat Datang!</h2>
-        <p className="text-zinc-600 dark:text-zinc-400">This app is mobile-first and includes a bottom navigation bar. Use the buttons below to explore.</p>
+        <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Selamat Datang!👋</h2>
+        <p className="text-zinc-600 dark:text-zinc-400">Aplikasi Internal Solusi Fajar Distrindo</p>
       </section>
 
       <section className="mt-6 grid gap-3">

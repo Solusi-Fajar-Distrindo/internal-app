@@ -24,7 +24,21 @@ export function MainLayout({ children }: MainLayoutProps) {
         return (
           <div className="slide-up">
             <main className="p-4">
-              <p className="text-zinc-600 dark:text-zinc-400">This is a placeholder Settings page. Wire up your settings here.</p>
+              <h2 className="text-xl font-semibold mb-4">Settings</h2>
+              <div className="space-y-4">
+                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <h3 className="font-medium mb-2">Appearance</h3>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Customize how the app looks</p>
+                </div>
+                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <h3 className="font-medium mb-2">Account</h3>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Manage your account settings</p>
+                </div>
+                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <h3 className="font-medium mb-2">Notifications</h3>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Configure notification preferences</p>
+                </div>
+              </div>
             </main>
           </div>
         )
