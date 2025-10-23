@@ -56,8 +56,35 @@ export default function FormsPage() {
     produkLainnya: "",
     minatOppLevel: "",
     kuantitas: "",
-    ringkasan: "",
-    nextAction: ""
+    ringkasanDiskusi: "",
+    statusTahap: {
+      prospek: false,
+      presentasi: false,
+      trial: false,
+      negosiasi: false,
+      po: false,
+      delivery: false,
+      closing: false,
+      afterSales: false,
+      other: false
+    },
+    statusTahapLainnya: "",
+    kebutuhanDokumen: {
+      companyProfile: false,
+      brosur: false,
+      sph: false,
+      kakSpesifikasi: false,
+      draftKontrak: false,
+      formTrial: false,
+      other: false
+    },
+    kebutuhanDokumenLainnya: "",
+    competitorDisebut: "",
+    merekModelKompetitor: "",
+    hargaKompetitor: "",
+    nextAction: "",
+    tugasLanjutan: "",
+    tanggalJatuhTempo: ""
   })
   const [openSections, setOpenSections] = useState({
     identitas: true,
@@ -541,18 +568,309 @@ export default function FormsPage() {
                       </div>
                     </CardHeader>
                   </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <CardContent className="space-y-4">
+                  <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
+                    <CardContent className="space-y-6 pt-2">
+                      {/* Ringkasan Diskusi */}
                       <div className="space-y-2">
-                        <Label htmlFor="ringkasan">Ringkasan Aktivitas</Label>
-                        <Input
-                          id="ringkasan"
-                          type="text"
-                          placeholder="Masukkan ringkasan aktivitas dan hasil"
-                          value={formData.ringkasan}
-                          onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
+                        <Label htmlFor="ringkasanDiskusi">Ringkasan Diskusi</Label>
+                        <textarea
+                          id="ringkasanDiskusi"
+                          placeholder="Masukkan ringkasan diskusi dan hasil"
+                          value={formData.ringkasanDiskusi}
+                          onChange={(e) => setFormData({ ...formData, ringkasanDiskusi: e.target.value })}
+                          className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          rows={4}
                           required
                         />
+                      </div>
+
+                      {/* Status Tahap */}
+                      <div className="space-y-3">
+                        <Label className="text-base font-medium">Status Tahap</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="prospek"
+                              checked={formData.statusTahap.prospek}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, prospek: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="prospek" className="text-sm">Prospek</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="presentasi"
+                              checked={formData.statusTahap.presentasi}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, presentasi: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="presentasi" className="text-sm">Presentasi</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="trial"
+                              checked={formData.statusTahap.trial}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, trial: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="trial" className="text-sm">Trial</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="negosiasi"
+                              checked={formData.statusTahap.negosiasi}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, negosiasi: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="negosiasi" className="text-sm">Negosiasi</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="po"
+                              checked={formData.statusTahap.po}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, po: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="po" className="text-sm">PO</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="delivery"
+                              checked={formData.statusTahap.delivery}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, delivery: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="delivery" className="text-sm">Delivery</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="closing"
+                              checked={formData.statusTahap.closing}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, closing: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="closing" className="text-sm">Closing</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="afterSales"
+                              checked={formData.statusTahap.afterSales}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, afterSales: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="afterSales" className="text-sm">After-sales</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="statusTahapOther"
+                              checked={formData.statusTahap.other}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  statusTahap: { ...formData.statusTahap, other: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="statusTahapOther" className="text-sm">Other</Label>
+                          </div>
+                        </div>
+                        {formData.statusTahap.other && (
+                          <div className="space-y-2">
+                            <Label htmlFor="statusTahapLainnya">Status Lainnya</Label>
+                            <Input
+                              id="statusTahapLainnya"
+                              type="text"
+                              placeholder="Masukkan status tahap lainnya"
+                              value={formData.statusTahapLainnya}
+                              onChange={(e) => setFormData({ ...formData, statusTahapLainnya: e.target.value })}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Kebutuhan Dokumen */}
+                      <div className="space-y-3">
+                        <Label className="text-base font-medium">Kebutuhan Dokumen</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="companyProfile"
+                              checked={formData.kebutuhanDokumen.companyProfile}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, companyProfile: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="companyProfile" className="text-sm">Company profile</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="brosur"
+                              checked={formData.kebutuhanDokumen.brosur}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, brosur: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="brosur" className="text-sm">Brosur</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="sph"
+                              checked={formData.kebutuhanDokumen.sph}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, sph: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="sph" className="text-sm">SPH</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="kakSpesifikasi"
+                              checked={formData.kebutuhanDokumen.kakSpesifikasi}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, kakSpesifikasi: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="kakSpesifikasi" className="text-sm">KAK/Spesifikasi</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="draftKontrak"
+                              checked={formData.kebutuhanDokumen.draftKontrak}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, draftKontrak: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="draftKontrak" className="text-sm">Draft Kontak</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="formTrial"
+                              checked={formData.kebutuhanDokumen.formTrial}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, formTrial: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="formTrial" className="text-sm">Form Trial</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="dokumenOther"
+                              checked={formData.kebutuhanDokumen.other}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  kebutuhanDokumen: { ...formData.kebutuhanDokumen, other: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="dokumenOther" className="text-sm">Other</Label>
+                          </div>
+                        </div>
+                        {formData.kebutuhanDokumen.other && (
+                          <div className="space-y-2">
+                            <Label htmlFor="kebutuhanDokumenLainnya">Dokumen Lainnya</Label>
+                            <Input
+                              id="kebutuhanDokumenLainnya"
+                              type="text"
+                              placeholder="Masukkan dokumen lainnya"
+                              value={formData.kebutuhanDokumenLainnya}
+                              onChange={(e) => setFormData({ ...formData, kebutuhanDokumenLainnya: e.target.value })}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Competitor Info */}
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="competitorDisebut">Competitor Disebut?</Label>
+                          <Select value={formData.competitorDisebut} onValueChange={(value) => setFormData({ ...formData, competitorDisebut: value })}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Pilih opsi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Ya">Ya</SelectItem>
+                              <SelectItem value="Tidak">Tidak</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {formData.competitorDisebut === "Ya" && (
+                          <>
+                            <div className="space-y-2">
+                              <Label htmlFor="merekModelKompetitor">Merek/Model Kompetitor</Label>
+                              <textarea
+                                id="merekModelKompetitor"
+                                placeholder="Masukkan merek/model kompetitor"
+                                value={formData.merekModelKompetitor}
+                                onChange={(e) => setFormData({ ...formData, merekModelKompetitor: e.target.value })}
+                                className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                rows={3}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="hargaKompetitor">Harga Kompetitor</Label>
+                              <Input
+                                id="hargaKompetitor"
+                                type="text"
+                                placeholder="Masukkan harga kompetitor"
+                                value={formData.hargaKompetitor}
+                                onChange={(e) => setFormData({ ...formData, hargaKompetitor: e.target.value })}
+                              />
+                            </div>
+                          </>
+                        )}
                       </div>
                     </CardContent>
                   </CollapsibleContent>
@@ -585,6 +903,45 @@ export default function FormsPage() {
                           onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })}
                           required
                         />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="tugasLanjutan">Tugas Lanjutan</Label>
+                        <textarea
+                          id="tugasLanjutan"
+                          placeholder="Masukkan detail tugas lanjutan"
+                          value={formData.tugasLanjutan}
+                          onChange={(e) => setFormData({ ...formData, tugasLanjutan: e.target.value })}
+                          className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          rows={4}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Tanggal Jatuh Tempo</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="w-full justify-start text-left font-normal"
+                            >
+                              {formData.tanggalJatuhTempo ? (
+                                format(new Date(formData.tanggalJatuhTempo), "dd/MM/yyyy", { locale: id })
+                              ) : (
+                                <span>Pilih tanggal jatuh tempo</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={formData.tanggalJatuhTempo ? new Date(formData.tanggalJatuhTempo) : undefined}
+                              onSelect={(date) => setFormData({ ...formData, tanggalJatuhTempo: date ? date.toISOString().split('T')[0] : "" })}
+                              locale={id}
+                              className="rounded-md"
+                            />
+                          </PopoverContent>
+                        </Popover>
                       </div>
                     </CardContent>
                   </CollapsibleContent>
