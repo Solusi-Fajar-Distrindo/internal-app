@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ModeToggle } from "@/components/mode-toggle"
 import { BottomNavigation } from "@/components/ui/bottom-navigation"
 import { HomeView } from "@/components/home-view"
+import { FormsView } from "@/components/forms-view"
 import Image from "next/image"
 
 interface MainLayoutProps {
@@ -18,21 +19,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       case "home":
         return <HomeView onNavigate={setActiveTab} />
       case "forms":
-        return (
-          <div className="slide-up">
-            <main className="p-4">
-              <p className="text-zinc-600 dark:text-zinc-400">This is a placeholder Forms page. Add your forms UI here.</p>
-              <div className="mt-4">
-                <button 
-                  onClick={() => setActiveTab("home")}
-                  className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
-                >
-                  Back to Home
-                </button>
-              </div>
-            </main>
-          </div>
-        )
+        return <FormsView onNavigate={setActiveTab} />
       case "settings":
         return (
           <div className="slide-up">
@@ -58,7 +45,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 pb-28 pt-6 sm:pt-32 sm:pb-28">
+      <main className="mx-auto max-w-lg px-4 pb-28 pt-6 sm:pb-28">
         {renderContent()}
       </main>
 
