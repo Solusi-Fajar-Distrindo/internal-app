@@ -24,6 +24,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function FormsPage() {
   const router = useRouter()
@@ -43,7 +44,18 @@ export default function FormsPage() {
     tujuanKunjungan: "",
     waktuMulai: "",
     waktuSelesai: "",
-    produk: "",
+    produkDibahas: {
+      kasa: false,
+      kertas: false,
+      pouch: false,
+      pensil: false,
+      collagen: false,
+      apron: false,
+      lainnya: false
+    },
+    produkLainnya: "",
+    minatOppLevel: "",
+    kuantitas: "",
     ringkasan: "",
     nextAction: ""
   })
@@ -373,16 +385,141 @@ export default function FormsPage() {
                     </CardHeader>
                   </CollapsibleTrigger>
                   <CollapsibleContent className="transition-all duration-300 ease-in-out data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in">
-                    <CardContent className="space-y-4 pt-2">
+                    <CardContent className="space-y-6 pt-2">
+                      {/* Produk/Segmen Dibahas */}
+                      <div className="space-y-3">
+                        <Label className="text-base font-medium">Produk/Segmen Dibahas</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="kasa"
+                              checked={formData.produkDibahas.kasa}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, kasa: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="kasa" className="text-sm">Kasa</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="kertas"
+                              checked={formData.produkDibahas.kertas}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, kertas: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="kertas" className="text-sm">Kertas</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="pouch"
+                              checked={formData.produkDibahas.pouch}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, pouch: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="pouch" className="text-sm">Pouch</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="pensil"
+                              checked={formData.produkDibahas.pensil}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, pensil: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="pensil" className="text-sm">Pensil</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="collagen"
+                              checked={formData.produkDibahas.collagen}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, collagen: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="collagen" className="text-sm">Collagen</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="apron"
+                              checked={formData.produkDibahas.apron}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, apron: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="apron" className="text-sm">Apron</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              id="lainnya"
+                              checked={formData.produkDibahas.lainnya}
+                              onCheckedChange={(checked) =>
+                                setFormData({
+                                  ...formData,
+                                  produkDibahas: { ...formData.produkDibahas, lainnya: checked as boolean }
+                                })
+                              }
+                            />
+                            <Label htmlFor="lainnya" className="text-sm">Lainnya</Label>
+                          </div>
+                        </div>
+                        {formData.produkDibahas.lainnya && (
+                          <div className="space-y-2">
+                            <Label htmlFor="produkLainnya">Produk Lainnya</Label>
+                            <Input
+                              id="produkLainnya"
+                              type="text"
+                              placeholder="Masukkan nama produk lainnya"
+                              value={formData.produkLainnya}
+                              onChange={(e) => setFormData({ ...formData, produkLainnya: e.target.value })}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Minat/Opp Level */}
                       <div className="space-y-2">
-                        <Label htmlFor="produk">Produk atau Segmen</Label>
+                        <Label htmlFor="minatOppLevel">Minat/Opp Level</Label>
+                        <Select value={formData.minatOppLevel} onValueChange={(value) => setFormData({ ...formData, minatOppLevel: value })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pilih minat/opportunity level" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Low">Low</SelectItem>
+                            <SelectItem value="Medium">Medium</SelectItem>
+                            <SelectItem value="High">High</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Kuantitas/Estimasi Nilai */}
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas">Kuantitas/Estimasi Nilai</Label>
                         <Input
-                          id="produk"
+                          id="kuantitas"
                           type="text"
-                          placeholder="Masukkan produk atau segmen"
-                          value={formData.produk}
-                          onChange={(e) => setFormData({ ...formData, produk: e.target.value })}
-                          required
+                          placeholder="Masukkan kuantitas/estimasi nilai"
+                          value={formData.kuantitas}
+                          onChange={(e) => setFormData({ ...formData, kuantitas: e.target.value })}
                         />
                       </div>
                     </CardContent>
