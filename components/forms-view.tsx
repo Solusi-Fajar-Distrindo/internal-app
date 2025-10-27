@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
 interface FormsViewProps {
@@ -7,31 +8,38 @@ interface FormsViewProps {
 }
 
 export function FormsView({ onNavigate }: FormsViewProps) {
+  const router = useRouter()
+
   const forms = [
     {
       title: "Pengajuan Dana Promosi",
       description: "Ajukan dana untuk kegiatan promosi",
-      content: "Klik untuk mengajukan dana promosi"
+      content: "Klik untuk mengajukan dana promosi",
+      route: "/forms/dana-promosi"
     },
     {
       title: "Pengajuan Itinerary UC",
       description: "Ajukan itinerary untuk kunjungan UC",
-      content: "Klik untuk mengajukan itinerary"
+      content: "Klik untuk mengajukan itinerary",
+      route: "/forms/itinerary-uc"
     },
     {
       title: "Permintaan Sample Produk",
       description: "Request sample produk untuk pelanggan",
-      content: "Klik untuk request sample produk"
+      content: "Klik untuk request sample produk",
+      route: "/forms/sample-produk"
     },
     {
       title: "Trial",
       description: "Ajukan trial produk untuk pelanggan",
-      content: "Klik untuk mengajukan trial"
+      content: "Klik untuk mengajukan trial",
+      route: "/forms/trial"
     },
     {
       title: "Laporan Keuangan UC",
       description: "Buat laporan keuangan kunjungan UC",
-      content: "Klik untuk membuat laporan keuangan"
+      content: "Klik untuk membuat laporan keuangan",
+      route: "/forms/laporan-keuangan"
     }
   ]
 
@@ -48,6 +56,7 @@ export function FormsView({ onNavigate }: FormsViewProps) {
             <Card
               key={index}
               className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+              onClick={() => router.push(form.route)}
             >
               <CardHeader>
                 <CardTitle>{form.title}</CardTitle>
