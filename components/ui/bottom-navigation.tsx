@@ -19,9 +19,9 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
   ]
 
   return (
-    // bottom navigation for all screen sizes
-    <nav className="fixed bottom-4 left-4 right-4 z-40">
-      <div className="mx-auto flex max-w-lg items-center justify-between gap-2 rounded-2xl bg-white/90 px-4 py-3 text-zinc-700 shadow-md backdrop-blur-md dark:bg-black/80 dark:text-zinc-200 dark:shadow-lg dark:shadow-white/5">
+    // bottom navigation docked to bottom of page
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-200 dark:border-zinc-800 bg-white/90 backdrop-blur-md dark:bg-black/80">
+      <div className="mx-auto flex max-w-lg items-center justify-between gap-2 px-4 py-3 text-zinc-700 dark:text-zinc-200">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.id

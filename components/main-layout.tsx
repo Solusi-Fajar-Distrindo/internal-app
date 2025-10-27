@@ -59,7 +59,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 pb-28 pt-6 sm:pb-28">
+      <main className="mx-auto max-w-lg px-4 pb-20 pt-6">
         {renderContent()}
       </main>
 
