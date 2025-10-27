@@ -1,15 +1,13 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ChevronLeftIcon } from "lucide-react"
+import { FormHeader } from "@/components/form-header"
 
 export default function TrialPage() {
-  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,21 +19,10 @@ export default function TrialPage() {
   return (
     <div className="slide-up">
       <main className="p-4">
-        <div className="mb-6">
-          <Button 
-            variant="ghost" 
-            onClick={() => router.back()}
-            className="mb-4"
-          >
-            <ChevronLeftIcon className="h-4 w-4 mr-2" />
-            Kembali
-          </Button>
-          
-          <section className="prose mx-auto max-w-none text-center sm:text-left">
-            <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Trial Produk</h2>
-            <p className="text-zinc-600 dark:text-zinc-400">Ajukan trial produk untuk pelanggan</p>
-          </section>
-        </div>
+        <FormHeader
+          title="Trial Produk"
+          description="Ajukan trial produk untuk pelanggan"
+        />
 
         <Card>
           <CardHeader>
