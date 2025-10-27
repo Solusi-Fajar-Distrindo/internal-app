@@ -33,12 +33,20 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-sm transition-all duration-200 hover:scale-105",
+                "flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-sm transition-all duration-200 hover:scale-105 cursor-pointer",
                 isActive && "text-primary bg-primary/10"
               )}
             >
-              <Icon className={`h-6 w-6 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`} />
-              <span className={`text-sm leading-none transition-all duration-200 ${isActive ? 'font-semibold' : ''}`}>{item.label}</span>
+              <Icon
+                className={`h-6 w-6 transition-all duration-200 ${isActive
+                  ? 'scale-110 fill-current'
+                  : 'scale-100'
+                  }`}
+              />
+              <span className={`text-sm leading-none transition-all duration-200 ${isActive
+                ? 'font-semibold text-primary'
+                : 'font-normal text-zinc-600 dark:text-zinc-400'
+                }`}>{item.label}</span>
             </button>
           )
         })}
