@@ -18,7 +18,7 @@ export default function ItineraryUCPage() {
 
   return (
     <div className="slide-up">
-      <main className="p-4">
+      <main className="p-4 pt-0">
         <FormHeader
           title="Pengajuan Itinerary UC"
           description="Ajukan itinerary untuk kunjungan UC"

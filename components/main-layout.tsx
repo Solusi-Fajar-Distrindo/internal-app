@@ -23,7 +23,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       case "settings":
         return (
           <div className="slide-up">
-            <main className="p-4">
+            <main className="p-4 pt-0">
               <h2 className="text-xl font-semibold mb-4">Settings</h2>
               <div className="space-y-4">
                 <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">

@@ -156,7 +156,7 @@ export default function DanaPromosiPage() {
 
   return (
     <div className="slide-up">
-      <main className="p-4">
+      <main className="p-4 pt-0">
         <FormHeader
           title="Pengajuan Dana Promosi"
           description="Ajukan dana untuk kegiatan promosi"

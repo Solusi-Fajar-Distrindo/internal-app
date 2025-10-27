@@ -45,7 +45,7 @@ export function FormsView({ onNavigate }: FormsViewProps) {
 
   return (
     <div className="slide-up">
-      <main className="p-4">
+      <main className="p-4 pt-0">
         <section className="prose mx-auto max-w-none text-center sm:text-left mb-6">
           <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Forms</h2>
           <p className="text-zinc-600 dark:text-zinc-400">Pilih form yang ingin Anda akses</p>

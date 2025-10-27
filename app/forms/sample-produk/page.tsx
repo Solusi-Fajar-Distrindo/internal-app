@@ -18,7 +18,7 @@ export default function SampleProdukPage() {
 
   return (
     <div className="slide-up">
-      <main className="p-4">
+      <main className="p-4 pt-0">
         <FormHeader
           title="Permintaan Sample Produk"
           description="Request sample produk untuk pelanggan"

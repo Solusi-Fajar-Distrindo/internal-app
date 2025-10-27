@@ -2,40 +2,70 @@
 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon } from "lucide-react"
+import { ChevronLeftIcon, MoreVerticalIcon } from "lucide-react"
 
 interface FormHeaderProps {
   title: string
-  description: string
+  description?: string
   showBackButton?: boolean
   backButtonText?: string
+  sticky?: boolean
+  rightAction?: React.ReactNode
 }
 
 export function FormHeader({ 
   title, 
-  description, 
+  description,
   showBackButton = true, 
-  backButtonText = "Kembali" 
+  backButtonText = "Kembali",
+  sticky = true,
+  rightAction
 }: FormHeaderProps) {
   const router = useRouter()
 
+  const headerClasses = sticky
+    ? "sticky top-0 z-50 bg-background border-b border-border shadow-sm py-2"
+    : "border-b border-border py-2"
+
   return (
-    <div className="mb-6">
-      {showBackButton && (
-        <Button 
-          variant="ghost" 
-          onClick={() => router.back()}
-          className="mb-4"
-        >
-          <ChevronLeftIcon className="h-4 w-4 mr-2" />
-          {backButtonText}
-        </Button>
-      )}
-      
-      <section className="prose mx-auto max-w-none text-center sm:text-left">
-        <h2 className="text-2xl font-semibold text-foreground">{title}</h2>
-        <p className="text-zinc-600 dark:text-zinc-400">{description}</p>
-      </section>
-    </div>
+    <>
+      <header className={headerClasses}>
+        <div className="flex items-center justify-between h-14 px-4">
+          {/* Left side - Back button */}
+          <div className="flex items-center">
+            {showBackButton && (
+              <Button
+                variant="ghost" 
+                size="icon"
+                onClick={() => router.back()}
+                className="h-9 w-9 hover:bg-accent/50 transition-colors"
+              >
+                <ChevronLeftIcon className="h-5 w-5" />
+              </Button>
+            )}
+          </div>
+
+          {/* Center - Title */}
+          <div className="flex-1 text-center px-4 min-w-0">
+            <h1 className="text-base font-semibold text-foreground truncate">
+              {title}
+            </h1>
+            {description && (
+              <p className="text-xs text-muted-foreground truncate mt-0.5">
+                {description}
+              </p>
+            )}
+          </div>
+
+          {/* Right side - Action or spacer */}
+          <div className="flex items-center">
+            {rightAction || <div className="h-9 w-9" />}
+          </div>
+        </div>
+      </header>
+
+      {/* Add padding below header to account for fixed positioning */}
+      {sticky && <div className="h-6" />}
+    </>
   )
 }
