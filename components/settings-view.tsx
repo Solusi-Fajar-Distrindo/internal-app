@@ -1,8 +1,11 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
 export function SettingsView() {
+  const router = useRouter()
+
   const settings = [
     {
       title: "User Management",
@@ -34,6 +37,7 @@ export function SettingsView() {
             <Card
               key={index}
               className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+              onClick={() => setting.title === "Account" && router.push("/akunku")}
             >
               <CardHeader>
                 <CardTitle>{setting.title}</CardTitle>
