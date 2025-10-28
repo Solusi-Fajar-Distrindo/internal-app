@@ -37,7 +37,13 @@ export function SettingsView() {
             <Card
               key={index}
               className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
-              onClick={() => setting.title === "Akun" && router.push("/akunku")}
+              onClick={() => {
+                if (setting.title === "Akun") {
+                  router.push("/akunku")
+                } else if (setting.title === "Manajemen Pengguna") {
+                  router.push("/pengaturan/manajemen-pengguna")
+                }
+              }}
             >
               <CardHeader>
                 <CardTitle>{setting.title}</CardTitle>
