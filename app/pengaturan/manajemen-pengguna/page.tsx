@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MainHeader } from "@/components/main-header"
 import { AddUserDialog } from "@/components/add-user-dialog"
+import { AddMultipleUsersDialog } from "@/components/add-multiple-users-dialog"
 import { EditUserDialog } from "@/components/edit-user-dialog"
 import { DeleteUserDialog } from "@/components/delete-user-dialog"
 import { Eye, EyeOff } from "lucide-react"
@@ -124,6 +125,24 @@ export default function ManajemenPenggunaPage() {
     setUsers(prev => prev.filter(user => user.id !== userId))
   }
 
+  const handleAddMultipleUsers = (emails: string[]) => {
+    console.log('Adding multiple users:', emails)
+
+    // Create users from emails with default password
+    const newUsers = emails.map((email, index) => {
+      const newId = Math.max(...users.map(u => u.id), 0) + index + 1
+      return {
+        id: newId,
+        nama: email.split('@')[0], // Use email prefix as name
+        email: email,
+        password: "12345678",
+        signatureImage: "/api/placeholder/150/50"
+      }
+    })
+
+    setUsers(prev => [...prev, ...newUsers])
+  }
+
   return (
     <div className="slide-up">
       <MainHeader 
@@ -142,7 +161,10 @@ export default function ManajemenPenggunaPage() {
                   Total {users.length} pengguna terdaftar
                 </CardDescription>
               </div>
-              <AddUserDialog onAddUser={handleAddUser} />
+              <div className="flex flex-col sm:flex-row gap-2">
+                <AddUserDialog onAddUser={handleAddUser} />
+                <AddMultipleUsersDialog onAddMultipleUsers={handleAddMultipleUsers} />
+              </div>
             </div>
           </CardHeader>
           <CardContent className="p-0">
