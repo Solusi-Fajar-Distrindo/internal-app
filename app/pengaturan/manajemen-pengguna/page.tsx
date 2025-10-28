@@ -5,10 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MainHeader } from "@/components/main-header"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Plus, Edit, Trash2, Eye, EyeOff, Upload, X } from "lucide-react"
+import { AddUserDialog } from "@/components/add-user-dialog"
+import { Edit, Trash2, Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -54,13 +52,6 @@ const users = [
 export default function ManajemenPenggunaPage() {
   const router = useRouter()
   const [showPasswords, setShowPasswords] = useState<{ [key: number]: boolean }>({})
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [newUser, setNewUser] = useState({
-    nama: '',
-    email: '',
-    password: '',
-    signatureImage: null as File | null
-  })
 
   const togglePasswordVisibility = (userId: number) => {
     setShowPasswords(prev => ({
@@ -69,23 +60,12 @@ export default function ManajemenPenggunaPage() {
     }))
   }
 
-  const handleAddUser = () => {
+  const handleAddUser = (newUser: any) => {
     // Here you would typically send the data to your API
     console.log('Adding user:', newUser)
     
-    // For now, just close the dialog and reset form
-    setIsAddDialogOpen(false)
-    setNewUser({
-      nama: '',
-      email: '',
-      password: '',
-      signatureImage: null
-    })
-  }
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    setNewUser(prev => ({ ...prev, signatureImage: file }))
+    // For now, just log the data
+    // In a real app, you would update the users array here
   }
 
   return (
@@ -106,101 +86,7 @@ export default function ManajemenPenggunaPage() {
                   Total {users.length} pengguna terdaftar
                 </CardDescription>
               </div>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="flex items-center gap-2 w-full sm:w-auto shrink-0 cursor-pointer">
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Tambah Pengguna</span>
-                    <span className="sm:hidden">Tambah</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Tambah Pengguna Baru</DialogTitle>
-                    <DialogDescription>
-                      Tambahkan pengguna baru ke dalam sistem. Isi semua informasi yang diperlukan.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="nama">Nama Lengkap</Label>
-                      <Input
-                        id="nama"
-                        placeholder="Masukkan nama lengkap"
-                        value={newUser.nama}
-                        onChange={(e) => setNewUser(prev => ({ ...prev, nama: e.target.value }))}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="nama@example.com"
-                        value={newUser.email}
-                        onChange={(e) => setNewUser(prev => ({ ...prev, email: e.target.value }))}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Masukkan password"
-                        value={newUser.password}
-                        onChange={(e) => setNewUser(prev => ({ ...prev, password: e.target.value }))}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="signature">Tanda Tangan</Label>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          id="signature"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          className="file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                        />
-                        {newUser.signatureImage && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setNewUser(prev => ({ ...prev, signatureImage: null }))}
-                            className="flex items-center gap-1 cursor-pointer"
-                          >
-                            <X className="h-3 w-3" />
-                            Hapus
-                          </Button>
-                        )}
-                      </div>
-                      {newUser.signatureImage && (
-                        <p className="text-xs text-muted-foreground">
-                          File dipilih: {newUser.signatureImage.name}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsAddDialogOpen(false)}
-                      className="cursor-pointer"
-                    >
-                      Batal
-                    </Button>
-                    <Button 
-                      type="button" 
-                      onClick={handleAddUser}
-                      disabled={!newUser.nama || !newUser.email || !newUser.password}
-                      className="cursor-pointer"
-                    >
-                      Tambah Pengguna
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <AddUserDialog onAddUser={handleAddUser} />
             </div>
           </CardHeader>
           <CardContent className="p-0">
