@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { MainHeader } from "@/components/main-header"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -56,12 +57,12 @@ export default function AkunkuPage() {
 
   return (
     <div className="slide-up">
+      <MainHeader
+        title="Akun Saya"
+        description="Kelola pengaturan dan preferensi akun Anda"
+        showBackButton={true}
+      />
       <main className="p-4 pt-0">
-        <section className="prose mx-auto max-w-none text-center sm:text-left mb-6">
-          <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">Akun Saya</h1>
-          <p className="text-zinc-600 dark:text-zinc-400">Kelola pengaturan dan preferensi akun Anda</p>
-        </section>
-
         <section className="space-y-6">
           {/* Profile Information */}
           <Card>

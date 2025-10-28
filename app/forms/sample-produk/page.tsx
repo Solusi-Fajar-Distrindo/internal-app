@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { FormHeader } from "@/components/form-header"
+import { MainHeader } from "@/components/main-header"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -124,7 +124,7 @@ export default function SampleProdukPage() {
 
   return (
     <div className="slide-up">
-      <FormHeader
+      <MainHeader
           title="Permintaan Sample Produk"
           description="Request sample produk untuk pelanggan"
         />

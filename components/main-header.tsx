@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon, MoreVerticalIcon } from "lucide-react"
 
-interface FormHeaderProps {
+interface MainHeaderProps {
   title: string
   description?: string
   showBackButton?: boolean
@@ -13,14 +13,14 @@ interface FormHeaderProps {
   rightAction?: React.ReactNode
 }
 
-export function FormHeader({ 
+export function MainHeader({ 
   title, 
   description,
   showBackButton = true, 
   backButtonText = "Kembali",
   sticky = true,
   rightAction
-}: FormHeaderProps) {
+}: MainHeaderProps) {
   const router = useRouter()
 
   const headerClasses = sticky

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { FormHeader } from "@/components/form-header"
+import { MainHeader } from "@/components/main-header"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -179,7 +179,7 @@ export default function DanaPromosiPage() {
 
   return (
     <div className="slide-up">
-      <FormHeader
+      <MainHeader
           title="Pengajuan Dana Promosi"
           description="Ajukan dana untuk kegiatan promosi"
         />

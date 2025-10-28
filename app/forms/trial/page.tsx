@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { FormHeader } from "@/components/form-header"
+import { MainHeader } from "@/components/main-header"
 
 export default function TrialPage() {
 
@@ -18,7 +18,7 @@ export default function TrialPage() {
 
   return (
     <div className="slide-up">
-      <FormHeader
+      <MainHeader
           title="Trial Produk"
           description="Ajukan trial produk untuk pelanggan"
         />
