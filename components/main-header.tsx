@@ -24,8 +24,8 @@ export function MainHeader({
   const router = useRouter()
 
   const headerClasses = sticky
-    ? "sticky top-0 z-50 bg-background border-b border-border py-2"
-    : "border-b border-border py-2"
+    ? "sticky top-0 z-50 border-b border-border py-2 backdrop-blur-sm"
+    : "border-b border-border py-2 backdrop-blur-sm"
 
   return (
     <>
