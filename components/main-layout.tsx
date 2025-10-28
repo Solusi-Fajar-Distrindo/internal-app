@@ -5,6 +5,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { BottomNavigation } from "@/components/ui/bottom-navigation"
 import { HomeView } from "@/components/home-view"
 import { FormsView } from "@/components/forms-view"
+import { SettingsView } from "@/components/settings-view"
 import Image from "next/image"
 
 interface MainLayoutProps {
@@ -21,27 +22,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       case "forms":
         return <FormsView onNavigate={setActiveTab} />
       case "settings":
-        return (
-          <div className="slide-up">
-            <main className="p-4 pt-0">
-              <h2 className="text-xl font-semibold mb-4">Settings</h2>
-              <div className="space-y-4">
-                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                  <h3 className="font-medium mb-2">Appearance</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Customize how the app looks</p>
-                </div>
-                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                  <h3 className="font-medium mb-2">Account</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Manage your account settings</p>
-                </div>
-                <div className="p-4 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                  <h3 className="font-medium mb-2">Notifications</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">Configure notification preferences</p>
-                </div>
-              </div>
-            </main>
-          </div>
-        )
+        return <SettingsView />
       default:
         return null
     }
