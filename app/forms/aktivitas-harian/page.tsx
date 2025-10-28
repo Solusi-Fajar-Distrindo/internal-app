@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
-import { ChevronLeftIcon } from "lucide-react"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -25,6 +24,7 @@ import {
 } from "@/components/ui/collapsible"
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { MainHeader } from "@/components/main-header"
 
 export default function FormsPage() {
   const router = useRouter()
@@ -103,21 +103,10 @@ export default function FormsPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black font-sans">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent py-3 backdrop-blur-sm bg-white/60 dark:bg-neutral-900/60">
-        <div className="desktop-container flex w-full items-center justify-between gap-3">
-          <div className="desktop-header-margins flex items-center gap-3">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => router.back()}
-              className="h-8 w-8"
-            >
-              <ChevronLeftIcon className="h-4 w-4" />
-            </Button>
-            <h1 className="text-lg font-semibold">Form Absensi</h1>
-          </div>
-        </div>
-      </header>
+      <MainHeader
+        title="Form Absensi"
+        description="Isi form absensi aktivitas harian marketing"
+      />
 
       <main className="desktop-container desktop-content-margins pb-28 pt-6">
         <Card>
