@@ -24,7 +24,7 @@ export function FormHeader({
   const router = useRouter()
 
   const headerClasses = sticky
-    ? "sticky top-0 z-50 bg-background border-b border-border shadow-sm py-2"
+    ? "sticky top-0 z-50 bg-background border-b border-border py-2"
     : "border-b border-border py-2"
 
   return (

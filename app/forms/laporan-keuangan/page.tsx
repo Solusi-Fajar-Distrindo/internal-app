@@ -18,12 +18,11 @@ export default function LaporanKeuanganPage() {
 
   return (
     <div className="slide-up">
-      <main className="p-4 pt-0">
-        <FormHeader
+      <FormHeader
           title="Laporan Keuangan UC"
           description="Buat laporan keuangan kunjungan UC"
         />
-
+      <main className="p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Laporan Keuangan UC</CardTitle>

@@ -18,12 +18,11 @@ export default function TrialPage() {
 
   return (
     <div className="slide-up">
-      <main className="p-4 pt-0">
-        <FormHeader
+      <FormHeader
           title="Trial Produk"
           description="Ajukan trial produk untuk pelanggan"
         />
-
+      <main className="p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Pengajuan Trial Produk</CardTitle>
