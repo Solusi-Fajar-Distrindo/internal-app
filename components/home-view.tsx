@@ -17,7 +17,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           <img
             src="/logo/SFD_Logo_Full_Transparent_BW.svg"
             alt="Solusi Fajar Distrindo Logo"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain dark:invert"
           />
         </div>
         <div className="prose max-w-none sm:ml-4">
