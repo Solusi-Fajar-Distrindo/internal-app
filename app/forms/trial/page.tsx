@@ -22,7 +22,7 @@ export default function TrialPage() {
           title="Trial Produk"
           description="Ajukan trial produk untuk pelanggan"
         />
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Pengajuan Trial Produk</CardTitle>

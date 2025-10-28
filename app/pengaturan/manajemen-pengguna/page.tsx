@@ -159,7 +159,7 @@ export default function ManajemenPenggunaPage() {
         title="Manajemen Pengguna"
         description="Kelola akun pengguna dan izin akses"
       />
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
 
         {/* Users Header Card */}
         <Card>

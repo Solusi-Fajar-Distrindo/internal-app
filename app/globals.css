@@ -193,4 +193,21 @@
       transform: scale(1);
     }
   }
+
+  /* Desktop margin utilities */
+  .desktop-container {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .desktop-margins {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .desktop-header-margins {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .desktop-content-margins {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
 }

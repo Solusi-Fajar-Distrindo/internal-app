@@ -56,17 +56,19 @@ export function MainLayout({ children, activeTab: propActiveTab }: MainLayoutPro
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black font-sans">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent px-4 py-3 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-lg w-full items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent py-3 backdrop-blur-sm">
+        <div className="desktop-container flex w-full items-center justify-between gap-3">
+          <div className="desktop-header-margins flex items-center gap-3">
             <Image src="/next.svg" alt="logo" width={28} height={6} className="dark:invert" />
             <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
           </div>
-          <ModeToggle />
+          <div className="desktop-header-margins flex items-center">
+            <ModeToggle />
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 pb-20 pt-6">
+      <main className="desktop-container desktop-content-margins pb-20 pt-6">
         {renderContent()}
       </main>
 

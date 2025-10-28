@@ -129,7 +129,7 @@ export default function SampleProdukPage() {
           description="Request sample produk untuk pelanggan"
         />
 
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Permintaan Sample Produk</CardTitle>

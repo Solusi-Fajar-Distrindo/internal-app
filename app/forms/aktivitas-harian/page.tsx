@@ -103,9 +103,9 @@ export default function FormsPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black font-sans">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent px-4 py-3 backdrop-blur-sm bg-white/60 dark:bg-neutral-900/60">
-        <div className="mx-auto flex max-w-lg w-full items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent py-3 backdrop-blur-sm bg-white/60 dark:bg-neutral-900/60">
+        <div className="desktop-container flex w-full items-center justify-between gap-3">
+          <div className="desktop-header-margins flex items-center gap-3">
             <Button 
               variant="ghost" 
               size="icon"
@@ -119,7 +119,7 @@ export default function FormsPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 pb-28 pt-6">
+      <main className="desktop-container desktop-content-margins pb-28 pt-6">
         <Card>
           <CardHeader>
             <CardTitle>Absensi Aktivitas Harian</CardTitle>

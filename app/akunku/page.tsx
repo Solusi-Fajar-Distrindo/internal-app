@@ -63,7 +63,7 @@ export default function AkunkuPage() {
         description="Kelola pengaturan dan preferensi akun Anda"
         showBackButton={true}
       />
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
         <section className="space-y-6">
           {/* Profile Information */}
           <Card>

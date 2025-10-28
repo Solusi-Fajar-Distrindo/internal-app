@@ -31,7 +31,7 @@ export function MainHeader({
   return (
     <>
       <header className={headerClasses}>
-        <div className="flex items-center justify-between h-14 px-4">
+        <div className="desktop-header-margins flex items-center justify-between h-14">
           {/* Left side - Back button */}
           <div className="flex items-center">
             {showBackButton && (

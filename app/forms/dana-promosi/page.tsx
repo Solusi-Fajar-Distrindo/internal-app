@@ -184,7 +184,7 @@ export default function DanaPromosiPage() {
           description="Ajukan dana untuk kegiatan promosi"
         />
 
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Pengajuan Dana Promosi</CardTitle>

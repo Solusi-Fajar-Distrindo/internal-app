@@ -164,7 +164,7 @@ export default function LaporanKeuanganPage() {
           description="Buat laporan keuangan kunjungan UC"
         />
 
-      <main className="p-4 pt-0">
+      <main className="desktop-content-margins p-4 pt-0">
         <Card>
           <CardHeader>
             <CardTitle>Form Laporan Keuangan UC</CardTitle>
