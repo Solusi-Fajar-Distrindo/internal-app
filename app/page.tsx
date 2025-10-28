@@ -1,5 +1,5 @@
-import { MainLayout } from "@/components/main-layout"
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return <MainLayout />
+  redirect('/home')
 }

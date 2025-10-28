@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
 import { BottomNavigation } from "@/components/ui/bottom-navigation"
 import { HomeView } from "@/components/home-view"
@@ -10,17 +10,43 @@ import Image from "next/image"
 
 interface MainLayoutProps {
   children?: React.ReactNode
+  activeTab?: string
 }
 
-export function MainLayout({ children }: MainLayoutProps) {
-  const [activeTab, setActiveTab] = useState("home")
+export function MainLayout({ children, activeTab: propActiveTab }: MainLayoutProps) {
+  const pathname = usePathname()
+  const router = useRouter()
+
+  // Determine active tab from pathname or prop
+  const getActiveTabFromPath = () => {
+    if (pathname === "/home") return "home"
+    if (pathname === "/forms") return "forms"
+    if (pathname === "/pengaturan") return "settings"
+    return propActiveTab || "home"
+  }
+
+  const activeTab = getActiveTabFromPath()
+
+  const handleTabChange = (tab: string) => {
+    switch (tab) {
+      case "home":
+        router.push("/home")
+        break
+      case "forms":
+        router.push("/forms")
+        break
+      case "settings":
+        router.push("/pengaturan")
+        break
+    }
+  }
 
   const renderContent = () => {
     switch (activeTab) {
       case "home":
-        return <HomeView onNavigate={setActiveTab} />
+        return <HomeView onNavigate={handleTabChange} />
       case "forms":
-        return <FormsView onNavigate={setActiveTab} />
+        return <FormsView onNavigate={handleTabChange} />
       case "settings":
         return <SettingsView />
       default:
@@ -44,7 +70,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         {renderContent()}
       </main>
 
-      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   )
 }
