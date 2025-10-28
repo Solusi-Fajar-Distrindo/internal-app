@@ -45,7 +45,7 @@ export function SettingsView() {
               className={`transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] ${setting.badge ? "cursor-not-allowed opacity-75" : "cursor-pointer"
                 }`}
               onClick={() => {
-                if (setting.title === "Akun") {
+                if (setting.title === "Akun Saya") {
                   router.push("/akunku")
                 } else if (setting.title === "Manajemen Pengguna") {
                   router.push("/pengaturan/manajemen-pengguna")

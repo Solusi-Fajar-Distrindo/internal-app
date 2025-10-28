@@ -63,7 +63,10 @@ export function AddMultipleUsersDialog({ onAddMultipleUsers }: AddMultipleUsersD
               <Label htmlFor="emails">Email Pengguna</Label>
               <Textarea
                 id="emails"
-                placeholder="Masukkan email pengguna, satu email per baris&#10;contoh:&#10;user1@example.com&#10;user2@example.com&#10;user3@example.com"
+                placeholder={`Masukkan email pengguna, satu email per baris contoh: 
+user1@example.com 
+user2@example.com 
+user3@example.com`}
                 value={emails}
                 onChange={(e) => setEmails(e.target.value)}
                 rows={8}
@@ -76,10 +79,10 @@ export function AddMultipleUsersDialog({ onAddMultipleUsers }: AddMultipleUsersD
           </div>
           
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="cursor-pointer">
               Batal
             </Button>
-            <Button type="submit">
+            <Button type="submit" className="cursor-pointer">
               Tambah {emails.split('\n').filter(email => email.trim()).length} Pengguna
             </Button>
           </DialogFooter>
