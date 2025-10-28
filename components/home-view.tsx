@@ -12,9 +12,18 @@ export function HomeView({ onNavigate }: HomeViewProps) {
 
   return (
     <div className="slide-up">
-      <section className="prose mx-auto max-w-none text-center sm:text-left">
-        <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Selamat Datang!👋</h2>
-        <p className="text-zinc-600 dark:text-zinc-400">Aplikasi Internal Solusi Fajar Distrindo</p>
+      <section className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
+        <div className="w-48 h-auto sm:w-60 shrink-0">
+          <img
+            src="/logo/SFD_Logo_Full_Transparent_BW.svg"
+            alt="Solusi Fajar Distrindo Logo"
+            className="w-full h-full object-contain"
+          />
+        </div>
+        <div className="prose max-w-none sm:ml-4">
+          <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Selamat Datang!👋</h2>
+          <p className="text-zinc-600 dark:text-zinc-400">Aplikasi Internal Solusi Fajar Distrindo</p>
+        </div>
       </section>
 
       <section className="mt-6 grid gap-3">
