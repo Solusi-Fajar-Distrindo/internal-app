@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Solusi Fajar Distrindo",
   description: "Aplikasi Internal Solusi Fajar Distrindo",
+  icons: {
+    icon: "/logo/SFD_Logo_BW_1_Transparent_X.svg",
+    shortcut: "/logo/SFD_Logo_BW_1_Transparent_X.svg",
+    apple: "/logo/SFD_Logo_BW_1_Transparent_X.svg",
+  },
 };
 
 export default function RootLayout({
