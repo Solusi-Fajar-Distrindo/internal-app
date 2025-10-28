@@ -356,7 +356,7 @@ export default function DanaPromosiPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`total-sales-${entry.id}`}>Total Sales (Auto-Calculated)</Label>
+                          <Label htmlFor={`total-sales-${entry.id}`}>Total Sales (Auto)</Label>
                           <Input
                             id={`total-sales-${entry.id}`}
                             type="number"
@@ -389,7 +389,7 @@ export default function DanaPromosiPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`nilai-${entry.id}`}>Nilai (Auto-Calculated)</Label>
+                          <Label htmlFor={`nilai-${entry.id}`}>Nilai (Auto)</Label>
                           <Input
                             id={`nilai-${entry.id}`}
                             type="number"
