@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MainHeader } from "@/components/main-header"
 import { AddUserDialog } from "@/components/add-user-dialog"
-import { Edit, Trash2, Eye, EyeOff } from "lucide-react"
+import { EditUserDialog } from "@/components/edit-user-dialog"
+import { DeleteUserDialog } from "@/components/delete-user-dialog"
+import { Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -52,6 +54,43 @@ const users = [
 export default function ManajemenPenggunaPage() {
   const router = useRouter()
   const [showPasswords, setShowPasswords] = useState<{ [key: number]: boolean }>({})
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      nama: "Ahmad Wijaya",
+      email: "ahmad.wijaya@example.com",
+      password: "***********",
+      signatureImage: "/api/placeholder/150/50"
+    },
+    {
+      id: 2,
+      nama: "Siti Nurhaliza",
+      email: "siti.nurhaliza@example.com",
+      password: "***********",
+      signatureImage: "/api/placeholder/150/50"
+    },
+    {
+      id: 3,
+      nama: "Budi Santoso",
+      email: "budi.santoso@example.com",
+      password: "***********",
+      signatureImage: "/api/placeholder/150/50"
+    },
+    {
+      id: 4,
+      nama: "Dewi Lestari",
+      email: "dewi.lestari@example.com",
+      password: "***********",
+      signatureImage: "/api/placeholder/150/50"
+    },
+    {
+      id: 5,
+      nama: "Eko Prasetyo",
+      email: "eko.prasetyo@example.com",
+      password: "***********",
+      signatureImage: "/api/placeholder/150/50"
+    }
+  ])
 
   const togglePasswordVisibility = (userId: number) => {
     setShowPasswords(prev => ({
@@ -64,8 +103,25 @@ export default function ManajemenPenggunaPage() {
     // Here you would typically send the data to your API
     console.log('Adding user:', newUser)
     
-    // For now, just log the data
-    // In a real app, you would update the users array here
+    // For now, just add to the users array with a new ID
+    const newId = Math.max(...users.map(u => u.id)) + 1
+    setUsers(prev => [...prev, { ...newUser, id: newId }])
+  }
+
+  const handleUpdateUser = (updatedUser: any) => {
+    console.log('Updating user:', updatedUser)
+
+    // Update the user in the array
+    setUsers(prev => prev.map(user =>
+      user.id === updatedUser.id ? updatedUser : user
+    ))
+  }
+
+  const handleDeleteUser = (userId: number) => {
+    console.log('Deleting user:', userId)
+
+    // Remove the user from the array
+    setUsers(prev => prev.filter(user => user.id !== userId))
   }
 
   return (
@@ -146,30 +202,14 @@ export default function ManajemenPenggunaPage() {
                     </TableCell>
                     <TableCell className="text-right px-4 py-4">
                       <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:bg-muted cursor-pointer"
-                          title="Lihat Detail"
-                        >
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:bg-muted cursor-pointer"
-                          title="Edit"
-                        >
-                          <Edit className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer"
-                          title="Hapus"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                        <EditUserDialog
+                          user={user}
+                          onUpdateUser={handleUpdateUser}
+                        />
+                        <DeleteUserDialog
+                          user={user}
+                          onDeleteUser={handleDeleteUser}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
