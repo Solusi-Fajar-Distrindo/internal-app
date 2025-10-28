@@ -20,7 +20,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
       <section className="mt-6 grid gap-3">
         <Card
           className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
-          onClick={() => router.push("/forms")}
+          onClick={() => router.push("/forms/aktivitas-harian")}
         >
           <CardHeader>
             <CardTitle>Aktivitas Harian</CardTitle>
