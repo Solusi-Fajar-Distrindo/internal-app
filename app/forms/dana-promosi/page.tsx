@@ -17,6 +17,17 @@ import {
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { FormHeader } from "@/components/form-header"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface Entry {
   id: string
@@ -49,6 +60,7 @@ export default function DanaPromosiPage() {
     periode: '',
     yangMengajukan: ''
   })
+  const [deleteId, setDeleteId] = useState<string | null>(null)
   const [entries, setEntries] = useState<Entry[]>([
     {
       id: '1',
@@ -134,8 +146,19 @@ export default function DanaPromosiPage() {
 
   const removeEntry = (id: string) => {
     if (entries.length > 1) {
-      setEntries(prev => prev.filter(entry => entry.id !== id))
+      setDeleteId(id)
     }
+  }
+
+  const confirmDelete = () => {
+    if (deleteId) {
+      setEntries(prev => prev.filter(entry => entry.id !== deleteId))
+      setDeleteId(null)
+    }
+  }
+
+  const cancelDelete = () => {
+    setDeleteId(null)
   }
 
   const toggleEntry = (id: string) => {
@@ -227,18 +250,36 @@ export default function DanaPromosiPage() {
                           )}
                         </div>
                         {entries.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              removeEntry(entry.id)
-                            }}
-                            className="text-red-500 hover:text-red-700 cursor-pointer"
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </Button>
+                          <AlertDialog open={deleteId === entry.id} onOpenChange={(open) => !open && setDeleteId(null)}>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  removeEntry(entry.id)
+                                }}
+                                className="text-red-500 hover:text-red-700 cursor-pointer"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Konfirmasi Hapus</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Apakah Anda yakin ingin menghapus entry ini? Tindakan ini tidak dapat dibatalkan.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel onClick={cancelDelete}>Batal</AlertDialogCancel>
+                                <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+                                  Hapus
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         )}
                       </div>
                     </CollapsibleTrigger>

@@ -15,7 +15,7 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
   const items = [
     { id: "home", label: "Home", icon: Home },
     { id: "forms", label: "Forms", icon: FileText },
-    { id: "settings", label: "Settings", icon: SettingsIcon },
+    { id: "settings", label: "Pengaturan", icon: SettingsIcon },
   ]
 
   return (
