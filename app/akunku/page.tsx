@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { MainHeader } from "@/components/main-header"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -31,17 +32,17 @@ export default function AkunkuPage() {
   const handleSaveProfile = () => {
     // Handle profile save logic here
     console.log("Saving profile:", { displayName })
-    alert("Profil berhasil diperbarui!")
+    toast.success("Profil berhasil diperbarui!")
   }
 
   const handlePasswordChange = () => {
     if (newPassword !== confirmPassword) {
-      alert("Kata sandi baru tidak cocok!")
+      toast.error("Kata sandi baru tidak cocok!")
       return
     }
     // Handle password change logic here
     console.log("Changing password")
-    alert("Kata sandi berhasil diubah!")
+    toast.success("Kata sandi berhasil diubah!")
     setCurrentPassword("")
     setNewPassword("")
     setConfirmPassword("")
@@ -51,7 +52,7 @@ export default function AkunkuPage() {
     if (signatureFile) {
       // Handle signature upload logic here
       console.log("Uploading signature:", signatureFile)
-      alert("Tanda tangan berhasil diunggah!")
+      toast.success("Tanda tangan berhasil diunggah!")
     }
   }
 
