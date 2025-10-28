@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, X } from "lucide-react"
 import { useState } from "react"
 
@@ -11,6 +12,7 @@ interface NewUser {
   nama: string
   email: string
   password: string
+  role: string
   signatureImage: File | null
 }
 
@@ -25,11 +27,12 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
     nama: '',
     email: '',
     password: '',
+    role: 'lapangan',
     signatureImage: null
   })
 
   const handleAddUser = () => {
-    if (!newUser.nama || !newUser.email || !newUser.password) {
+    if (!newUser.nama || !newUser.email || !newUser.password || !newUser.role) {
       return
     }
     
@@ -39,6 +42,7 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
       nama: '',
       email: '',
       password: '',
+      role: 'lapangan',
       signatureImage: null
     })
   }
@@ -54,6 +58,7 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
       nama: '',
       email: '',
       password: '',
+      role: 'lapangan',
       signatureImage: null
     })
   }
@@ -109,6 +114,19 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
             />
           </div>
           <div className="grid gap-2">
+            <Label htmlFor="role">Role</Label>
+            <Select value={newUser.role} onValueChange={(value) => setNewUser(prev => ({ ...prev, role: value }))}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="lapangan">Lapangan</SelectItem>
+                <SelectItem value="backoffice">Back Office</SelectItem>
+                <SelectItem value="superuser">Super User</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="signature">Tanda Tangan</Label>
             <div className="flex items-center gap-2">
               <Input
@@ -150,7 +168,7 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
           <Button 
             type="button" 
             onClick={handleAddUser}
-            disabled={!newUser.nama || !newUser.email || !newUser.password}
+            disabled={!newUser.nama || !newUser.email || !newUser.password || !newUser.role}
             className="cursor-pointer"
           >
             Tambah Pengguna

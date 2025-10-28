@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, X } from "lucide-react"
 import { useState, useEffect } from "react"
 
@@ -12,6 +13,7 @@ interface User {
   nama: string
   email: string
   password: string
+  role: string
   signatureImage: string | File | null
 }
 
@@ -30,7 +32,7 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
   }, [user])
 
   const handleUpdateUser = () => {
-    if (!editedUser.nama || !editedUser.email || !editedUser.password) {
+    if (!editedUser.nama || !editedUser.email || !editedUser.password || !editedUser.role) {
       return
     }
     
@@ -102,6 +104,19 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
             />
           </div>
           <div className="grid gap-2">
+            <Label htmlFor="role">Role</Label>
+            <Select value={editedUser.role} onValueChange={(value) => setEditedUser(prev => ({ ...prev, role: value }))}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="lapangan">Lapangan</SelectItem>
+                <SelectItem value="backoffice">Back Office</SelectItem>
+                <SelectItem value="superuser">Super User</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="signature">Tanda Tangan</Label>
             <div className="flex items-center gap-2">
               <Input
@@ -146,7 +161,7 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
           <Button 
             type="button" 
             onClick={handleUpdateUser}
-            disabled={!editedUser.nama || !editedUser.email || !editedUser.password}
+            disabled={!editedUser.nama || !editedUser.email || !editedUser.password || !editedUser.role}
             className="cursor-pointer"
           >
             Simpan Perubahan

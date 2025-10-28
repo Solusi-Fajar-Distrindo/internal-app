@@ -61,6 +61,7 @@ export default function ManajemenPenggunaPage() {
       nama: "Ahmad Wijaya",
       email: "ahmad.wijaya@example.com",
       password: "***********",
+      role: "lapangan",
       signatureImage: "/api/placeholder/150/50"
     },
     {
@@ -68,6 +69,7 @@ export default function ManajemenPenggunaPage() {
       nama: "Siti Nurhaliza",
       email: "siti.nurhaliza@example.com",
       password: "***********",
+      role: "backoffice",
       signatureImage: "/api/placeholder/150/50"
     },
     {
@@ -75,6 +77,7 @@ export default function ManajemenPenggunaPage() {
       nama: "Budi Santoso",
       email: "budi.santoso@example.com",
       password: "***********",
+      role: "superuser",
       signatureImage: "/api/placeholder/150/50"
     },
     {
@@ -82,6 +85,7 @@ export default function ManajemenPenggunaPage() {
       nama: "Dewi Lestari",
       email: "dewi.lestari@example.com",
       password: "***********",
+      role: "lapangan",
       signatureImage: "/api/placeholder/150/50"
     },
     {
@@ -89,6 +93,7 @@ export default function ManajemenPenggunaPage() {
       nama: "Eko Prasetyo",
       email: "eko.prasetyo@example.com",
       password: "***********",
+      role: "backoffice",
       signatureImage: "/api/placeholder/150/50"
     }
   ])
@@ -106,7 +111,11 @@ export default function ManajemenPenggunaPage() {
     
     // For now, just add to the users array with a new ID
     const newId = Math.max(...users.map(u => u.id)) + 1
-    setUsers(prev => [...prev, { ...newUser, id: newId }])
+    setUsers(prev => [...prev, {
+      ...newUser,
+      id: newId,
+      signatureImage: newUser.signatureImage ? "/api/placeholder/150/50" : "/api/placeholder/150/50"
+    }])
   }
 
   const handleUpdateUser = (updatedUser: any) => {
@@ -128,7 +137,7 @@ export default function ManajemenPenggunaPage() {
   const handleAddMultipleUsers = (emails: string[]) => {
     console.log('Adding multiple users:', emails)
 
-    // Create users from emails with default password
+    // Create users from emails with default password and role
     const newUsers = emails.map((email, index) => {
       const newId = Math.max(...users.map(u => u.id), 0) + index + 1
       return {
@@ -136,6 +145,7 @@ export default function ManajemenPenggunaPage() {
         nama: email.split('@')[0], // Use email prefix as name
         email: email,
         password: "12345678",
+        role: "lapangan", // Default role
         signatureImage: "/api/placeholder/150/50"
       }
     })
@@ -151,7 +161,7 @@ export default function ManajemenPenggunaPage() {
       />
       <main className="p-4 pt-0">
 
-        {/* Users Table */}
+        {/* Users Header Card */}
         <Card>
           <CardHeader className="pb-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -167,6 +177,10 @@ export default function ManajemenPenggunaPage() {
               </div>
             </div>
           </CardHeader>
+        </Card>
+
+        {/* Users Table Card */}
+        <Card className="mt-6">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
@@ -175,6 +189,7 @@ export default function ManajemenPenggunaPage() {
                     <TableHead className="whitespace-nowrap px-4 py-3">Nama</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Email</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Password</TableHead>
+                    <TableHead className="whitespace-nowrap px-4 py-3">Role</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Tanda Tangan</TableHead>
                     <TableHead className="whitespace-nowrap text-right px-4 py-3 pr-6">Aksi</TableHead>
                   </TableRow>
@@ -202,6 +217,18 @@ export default function ManajemenPenggunaPage() {
                           )}
                         </Button>
                       </div>
+                    </TableCell>
+                    <TableCell className="px-4 py-4">
+                      <Badge
+                        variant={
+                          user.role === "superuser" ? "destructive" :
+                            user.role === "backoffice" ? "default" :
+                              "secondary"
+                        }
+                        className="capitalize"
+                      >
+                        {user.role}
+                      </Badge>
                     </TableCell>
                     <TableCell className="px-4 py-4">
                       <div className="flex items-center gap-2">

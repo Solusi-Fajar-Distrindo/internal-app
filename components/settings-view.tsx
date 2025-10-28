@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Users, User, Bell } from "lucide-react"
 
 export function SettingsView() {
   const router = useRouter()
@@ -11,17 +12,20 @@ export function SettingsView() {
     {
       title: "Manajemen Pengguna",
       description: "Kelola akun pengguna dan izin akses",
-      content: "Tambah, edit, atau hapus pengguna dan konfigurasi tingkat akses"
+      content: "Tambah, edit, atau hapus pengguna dan konfigurasi tingkat akses",
+      icon: Users
     },
     {
-      title: "Akun",
+      title: "Akun Saya",
       description: "Kelola pengaturan akun Anda",
-      content: "Perbarui profil, kata sandi, dan pengaturan keamanan"
+      content: "Perbarui profil, kata sandi, dan pengaturan keamanan",
+      icon: User
     },
     {
       title: "Notifikasi",
       description: "Konfigurasi preferensi notifikasi",
       content: "Kontrol peringatan, suara, dan waktu notifikasi",
+      icon: Bell,
       badge: "Segera Tiba"
     }
   ]
@@ -50,7 +54,12 @@ export function SettingsView() {
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>{setting.title}</CardTitle>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <setting.icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <CardTitle>{setting.title}</CardTitle>
+                  </div>
                   {setting.badge && (
                     <Badge variant="secondary" className="text-xs">
                       {setting.badge}
