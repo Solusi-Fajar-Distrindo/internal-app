@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 interface FormsViewProps {
   onNavigate: (tab: string) => void
@@ -30,16 +31,17 @@ export function FormsView({ onNavigate }: FormsViewProps) {
       route: "/forms/sample-produk"
     },
     {
-      title: "Trial",
-      description: "Ajukan trial produk untuk pelanggan",
-      content: "Klik untuk mengajukan trial",
-      route: "/forms/trial"
-    },
-    {
       title: "Laporan Keuangan UC",
       description: "Buat laporan keuangan kunjungan UC",
       content: "Klik untuk membuat laporan keuangan",
       route: "/forms/laporan-keuangan"
+    },
+    {
+      title: "Trial",
+      description: "Ajukan trial produk untuk pelanggan",
+      content: "Klik untuk mengajukan trial",
+      route: "/forms/trial",
+      badge: "Segera Tiba"
     }
   ]
 
@@ -55,11 +57,23 @@ export function FormsView({ onNavigate }: FormsViewProps) {
           {forms.map((form, index) => (
             <Card
               key={index}
-              className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
-              onClick={() => router.push(form.route)}
+              className={`transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] ${form.badge ? "cursor-not-allowed opacity-75" : "cursor-pointer"
+                }`}
+              onClick={() => {
+                if (!form.badge) {
+                  router.push(form.route)
+                }
+              }}
             >
               <CardHeader>
-                <CardTitle>{form.title}</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>{form.title}</CardTitle>
+                  {form.badge && (
+                    <Badge variant="secondary" className="text-xs">
+                      {form.badge}
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription>{form.description}</CardDescription>
               </CardHeader>
               <CardContent>

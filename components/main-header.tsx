@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon, MoreVerticalIcon } from "lucide-react"
+import { ModeToggle } from "@/components/mode-toggle"
 
 interface MainHeaderProps {
   title: string
@@ -57,9 +58,9 @@ export function MainHeader({
             )}
           </div>
 
-          {/* Right side - Action or spacer */}
+          {/* Right side - Action or ModeToggle */}
           <div className="flex items-center">
-            {rightAction || <div className="h-9 w-9" />}
+            {rightAction || <ModeToggle />}
           </div>
         </div>
       </header>

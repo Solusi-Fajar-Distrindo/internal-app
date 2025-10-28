@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 export function SettingsView() {
   const router = useRouter()
@@ -20,7 +21,8 @@ export function SettingsView() {
     {
       title: "Notifikasi",
       description: "Konfigurasi preferensi notifikasi",
-      content: "Kontrol peringatan, suara, dan waktu notifikasi"
+      content: "Kontrol peringatan, suara, dan waktu notifikasi",
+      badge: "Segera Tiba"
     }
   ]
 
@@ -36,7 +38,8 @@ export function SettingsView() {
           {settings.map((setting, index) => (
             <Card
               key={index}
-              className="cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
+              className={`transition-all duration-200 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] ${setting.badge ? "cursor-not-allowed opacity-75" : "cursor-pointer"
+                }`}
               onClick={() => {
                 if (setting.title === "Akun") {
                   router.push("/akunku")
@@ -46,7 +49,14 @@ export function SettingsView() {
               }}
             >
               <CardHeader>
-                <CardTitle>{setting.title}</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>{setting.title}</CardTitle>
+                  {setting.badge && (
+                    <Badge variant="secondary" className="text-xs">
+                      {setting.badge}
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription>{setting.description}</CardDescription>
               </CardHeader>
               <CardContent>
