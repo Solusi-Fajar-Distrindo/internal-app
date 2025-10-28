@@ -146,6 +146,20 @@ export default function AkunkuPage() {
               <CardDescription>Unggah tanda tangan digital Anda untuk dokumen</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  <strong>Penting:</strong> Pastikan gambar tanda tangan Anda memiliki background transparan.
+                  Gunakan tools seperti <a 
+                    href="https://www.remove.bg" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="font-mono bg-blue-100 dark:bg-blue-900 px-1 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors underline"
+                  >
+                    remove.bg
+                  </a> atau
+                  editor gambar lainnya untuk membuat background transparan sebelum mengunggah.
+                </p>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="signature">Gambar Tanda Tangan</Label>
                 <Input
