@@ -212,7 +212,7 @@ export default function ManajemenPenggunaPage() {
                     <TableHead className="whitespace-nowrap px-4 py-3">Email</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Password</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Tanda Tangan</TableHead>
-                    <TableHead className="whitespace-nowrap text-right px-4 py-3">Aksi</TableHead>
+                    <TableHead className="whitespace-nowrap text-right px-4 py-3 pr-6">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
               <TableBody>
