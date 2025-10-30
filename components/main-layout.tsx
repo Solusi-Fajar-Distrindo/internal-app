@@ -59,7 +59,18 @@ export function MainLayout({ children, activeTab: propActiveTab }: MainLayoutPro
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-transparent py-3 backdrop-blur-sm">
         <div className="desktop-container flex w-full items-center justify-between gap-3">
           <div className="desktop-header-margins flex items-center gap-3">
-            <Image src="logo/SFD_Logo_BW_Transparent_X.svg" alt="logo" width={28} height={6} className="dark:invert" />
+            <button
+              onClick={() => router.push("/home")}
+              className="cursor-pointer"
+            >
+              <Image
+                src="logo/SFD_Logo_BW_Transparent_X.svg"
+                alt="logo"
+                width={28}
+                height={6}
+                className="dark:invert"
+              />
+            </button>
             <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
           </div>
           <div className="desktop-header-margins flex items-center">

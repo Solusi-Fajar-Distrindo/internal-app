@@ -44,7 +44,7 @@ export function AddMultipleUsersDialog({ onAddMultipleUsers }: AddMultipleUsersD
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="gap-2">
+        <Button variant="secondary" className="gap-2 cursor-pointer">
           <Users className="h-4 w-4" />
           Tambah Banyak Pengguna
         </Button>
