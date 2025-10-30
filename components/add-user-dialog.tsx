@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, X } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 interface NewUser {
   nama: string
@@ -31,20 +32,46 @@ export function AddUserDialog({ onAddUser, trigger }: AddUserDialogProps) {
     signatureImage: null
   })
 
-  const handleAddUser = () => {
+  const handleAddUser = async () => {
     if (!newUser.nama || !newUser.email || !newUser.password || !newUser.role) {
+      toast.error('Semua field harus diisi')
       return
     }
-    
-    onAddUser(newUser)
-    setIsOpen(false)
-    setNewUser({
-      nama: '',
-      email: '',
-      password: '',
-      role: 'lapangan',
-      signatureImage: null
-    })
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nama: newUser.nama,
+          email: newUser.email,
+          password: newUser.password,
+          role: newUser.role
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Gagal menambahkan pengguna')
+      }
+
+      toast.success('Pengguna berhasil ditambahkan')
+      onAddUser(newUser)
+      setIsOpen(false)
+      setNewUser({
+        nama: '',
+        email: '',
+        password: '',
+        role: 'lapangan',
+        signatureImage: null
+      })
+    } catch (error) {
+      console.error('Error adding user:', error)
+      toast.error(error instanceof Error ? error.message : 'Terjadi kesalahan')
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
