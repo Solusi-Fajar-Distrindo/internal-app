@@ -9,113 +9,76 @@ import { AddUserDialog } from "@/components/add-user-dialog"
 import { AddMultipleUsersDialog } from "@/components/add-multiple-users-dialog"
 import { EditUserDialog } from "@/components/edit-user-dialog"
 import { DeleteUserDialog } from "@/components/delete-user-dialog"
-import { Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 
-// Sample user data
-const users = [
-  {
-    id: 1,
-    nama: "Ahmad Wijaya",
-    email: "ahmad.wijaya@example.com",
-    password: "********",
-    signatureImage: "/api/placeholder/150/50"
-  },
-  {
-    id: 2,
-    nama: "Siti Nurhaliza",
-    email: "siti.nurhaliza@example.com",
-    password: "********",
-    signatureImage: "/api/placeholder/150/50"
-  },
-  {
-    id: 3,
-    nama: "Budi Santoso",
-    email: "budi.santoso@example.com",
-    password: "********",
-    signatureImage: "/api/placeholder/150/50"
-  },
-  {
-    id: 4,
-    nama: "Dewi Lestari",
-    email: "dewi.lestari@example.com",
-    password: "********",
-    signatureImage: "/api/placeholder/150/50"
-  },
-  {
-    id: 5,
-    nama: "Eko Prasetyo",
-    email: "eko.prasetyo@example.com",
-    password: "********",
-    signatureImage: "/api/placeholder/150/50"
-  }
-]
+// Define user type based on database schema
+type User = {
+  id: string
+  nama: string
+  email: string
+  role: 'lapangan' | 'backoffice' | 'superuser'
+  signature_image_url?: string
+  created_at?: string
+  updated_at?: string
+}
 
 export default function ManajemenPenggunaPage() {
   const router = useRouter()
-  const [showPasswords, setShowPasswords] = useState<{ [key: number]: boolean }>({})
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      nama: "Ahmad Wijaya",
-      email: "ahmad.wijaya@example.com",
-      password: "***********",
-      role: "lapangan",
-      signatureImage: "/api/placeholder/150/50"
-    },
-    {
-      id: 2,
-      nama: "Siti Nurhaliza",
-      email: "siti.nurhaliza@example.com",
-      password: "***********",
-      role: "backoffice",
-      signatureImage: "/api/placeholder/150/50"
-    },
-    {
-      id: 3,
-      nama: "Budi Santoso",
-      email: "budi.santoso@example.com",
-      password: "***********",
-      role: "superuser",
-      signatureImage: "/api/placeholder/150/50"
-    },
-    {
-      id: 4,
-      nama: "Dewi Lestari",
-      email: "dewi.lestari@example.com",
-      password: "***********",
-      role: "lapangan",
-      signatureImage: "/api/placeholder/150/50"
-    },
-    {
-      id: 5,
-      nama: "Eko Prasetyo",
-      email: "eko.prasetyo@example.com",
-      password: "***********",
-      role: "backoffice",
-      signatureImage: "/api/placeholder/150/50"
-    }
-  ])
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
 
-  const togglePasswordVisibility = (userId: number) => {
-    setShowPasswords(prev => ({
-      ...prev,
-      [userId]: !prev[userId]
-    }))
-  }
+  // Adapter function to convert database User to dialog User type
+  const userToDialogUser = (user: User) => ({
+    id: parseInt(user.id) || 0, // Convert string UUID to number for dialog compatibility
+    nama: user.nama,
+    email: user.email,
+    password: '', // Password not stored in database
+    role: user.role,
+    signatureImage: user.signature_image_url || null
+  })
+
+  // Fetch users from Supabase
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (error) {
+          console.error('Error fetching users:', error)
+        } else {
+          setUsers(data || [])
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [supabase])
+
+
 
   const handleAddUser = (newUser: any) => {
     // Here you would typically send the data to your API
     console.log('Adding user:', newUser)
     
     // For now, just add to the users array with a new ID
-    const newId = Math.max(...users.map(u => u.id)) + 1
-    setUsers(prev => [...prev, {
-      ...newUser,
-      id: newId,
-      signatureImage: newUser.signatureImage ? "/api/placeholder/150/50" : "/api/placeholder/150/50"
-    }])
+    const tempUser: User = {
+      id: `temp-${Date.now()}`,
+      nama: newUser.nama,
+      email: newUser.email,
+      role: newUser.role,
+      signature_image_url: newUser.signatureImage || "/api/placeholder/150/50"
+    }
+    setUsers(prev => [...prev, tempUser])
   }
 
   const handleUpdateUser = (updatedUser: any) => {
@@ -123,11 +86,11 @@ export default function ManajemenPenggunaPage() {
 
     // Update the user in the array
     setUsers(prev => prev.map(user =>
-      user.id === updatedUser.id ? updatedUser : user
+      user.id === updatedUser.id ? { ...user, ...updatedUser } : user
     ))
   }
 
-  const handleDeleteUser = (userId: number) => {
+  const handleDeleteUser = (userId: string) => {
     console.log('Deleting user:', userId)
 
     // Remove the user from the array
@@ -137,16 +100,14 @@ export default function ManajemenPenggunaPage() {
   const handleAddMultipleUsers = (emails: string[]) => {
     console.log('Adding multiple users:', emails)
 
-    // Create users from emails with default password and role
-    const newUsers = emails.map((email, index) => {
-      const newId = Math.max(...users.map(u => u.id), 0) + index + 1
+    // Create users from emails with default role
+    const newUsers: User[] = emails.map((email, index) => {
       return {
-        id: newId,
+        id: `temp-multi-${Date.now()}-${index}`,
         nama: email.split('@')[0], // Use email prefix as name
         email: email,
-        password: "12345678",
         role: "lapangan", // Default role
-        signatureImage: "/api/placeholder/150/50"
+        signature_image_url: "/api/placeholder/150/50"
       }
     })
 
@@ -188,81 +149,92 @@ export default function ManajemenPenggunaPage() {
                   <TableRow>
                     <TableHead className="whitespace-nowrap px-4 py-3">Nama</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Email</TableHead>
-                    <TableHead className="whitespace-nowrap px-4 py-3">Password</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Role</TableHead>
                     <TableHead className="whitespace-nowrap px-4 py-3">Tanda Tangan</TableHead>
                     <TableHead className="whitespace-nowrap text-right px-4 py-3 pr-6">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
               <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium px-4 py-4">{user.nama}</TableCell>
-                    <TableCell className="px-4 py-4">{user.email}</TableCell>
-                    <TableCell className="px-4 py-4">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm">
-                          {showPasswords[user.id] ? "password123" : user.password}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => togglePasswordVisibility(user.id)}
-                          className="h-7 w-7 p-0 hover:bg-muted cursor-pointer"
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8">
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                          <span className="ml-2">Memuat data pengguna...</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ) : users.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8">
+                        <p className="text-muted-foreground">Tidak ada data pengguna</p>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    users.map((user) => (
+                      <TableRow key={user.id} className="hover:bg-muted/50">
+                        <TableCell className="font-medium px-4 py-4">{user.nama}</TableCell>
+                        <TableCell className="px-4 py-4">{user.email}</TableCell>
+                        <TableCell className="px-4 py-4">
+                        <Badge
+                          variant={
+                            user.role === "superuser" ? "destructive" :
+                              user.role === "backoffice" ? "default" :
+                                "secondary"
+                          }
+                          className="capitalize"
                         >
-                          {showPasswords[user.id] ? (
-                            <EyeOff className="h-3 w-3" />
-                          ) : (
-                            <Eye className="h-3 w-3" />
-                          )}
-                        </Button>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-4 py-4">
-                      <Badge
-                        variant={
-                          user.role === "superuser" ? "destructive" :
-                            user.role === "backoffice" ? "default" :
-                              "secondary"
-                        }
-                        className="capitalize"
-                      >
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-4 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
-                          <img 
-                            src={user.signatureImage} 
-                            alt="Signature" 
-                            className="max-w-full max-h-full object-contain"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          {user.role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="px-4 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-20 h-8 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
+                            {user.signature_image_url ? (
+                              <img 
+                                src={user.signature_image_url}
+                                alt="Signature"
+                                className="max-w-full max-h-full object-contain"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                }}
+                              />
+                            ) : null}
+                            <span className={user.signature_image_url ? "hidden" : ""}>
+                              No Image
+                            </span>
+                          </div>
+                          <Badge variant="outline" className="text-xs">
+                            {user.signature_image_url ? "Tersedia" : "Tidak Ada"}
+                          </Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right px-4 py-4">
+                        <div className="flex items-center justify-end gap-1">
+                          <EditUserDialog
+                            user={userToDialogUser(user)}
+                            onUpdateUser={(updatedDialogUser) => {
+                              // Convert back to database User type
+                              const updatedUser: User = {
+                                id: user.id,
+                                nama: updatedDialogUser.nama,
+                                email: updatedDialogUser.email,
+                                role: updatedDialogUser.role as 'lapangan' | 'backoffice' | 'superuser',
+                                signature_image_url: updatedDialogUser.signatureImage as string || undefined
+                              }
+                              handleUpdateUser(updatedUser)
                             }}
                           />
-                          <span className="hidden">No Image</span>
+                          <DeleteUserDialog
+                            user={userToDialogUser(user)}
+                            onDeleteUser={(userId) => handleDeleteUser(user.id)}
+                          />
                         </div>
-                        <Badge variant="outline" className="text-xs">
-                          Tersedia
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right px-4 py-4">
-                      <div className="flex items-center justify-end gap-1">
-                        <EditUserDialog
-                          user={user}
-                          onUpdateUser={handleUpdateUser}
-                        />
-                        <DeleteUserDialog
-                          user={user}
-                          onDeleteUser={handleDeleteUser}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                  )}
               </TableBody>
             </Table>
             </div>
