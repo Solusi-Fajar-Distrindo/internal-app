@@ -22,6 +22,7 @@ type User = {
   signature_image_url?: string
   created_at?: string
   updated_at?: string
+  deleted_at?: string
 }
 
 export default function ManajemenPenggunaPage() {
@@ -47,6 +48,7 @@ export default function ManajemenPenggunaPage() {
         const { data, error } = await supabase
           .from('users')
           .select('*')
+          .is('deleted_at', null)
           .order('created_at', { ascending: false })
 
         if (error) {
@@ -90,11 +92,22 @@ export default function ManajemenPenggunaPage() {
     ))
   }
 
-  const handleDeleteUser = (userId: string) => {
-    console.log('Deleting user:', userId)
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', userId)
 
-    // Remove the user from the array
-    setUsers(prev => prev.filter(user => user.id !== userId))
+      if (error) {
+        console.error('Error soft deleting user:', error)
+      } else {
+        // Remove the user from the local state
+        setUsers(prev => prev.filter(user => user.id !== userId))
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   const handleAddMultipleUsers = (emails: string[]) => {
