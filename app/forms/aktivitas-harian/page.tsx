@@ -109,19 +109,20 @@ export default function FormsPage() {
       />
 
       <main className="desktop-container desktop-content-margins pb-28 pt-6">
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Absensi Aktivitas Harian</CardTitle>
+            <CardTitle className="text-lg">Absensi Aktivitas Harian</CardTitle>
             <CardDescription>Isi form absensi aktivitas harian marketing</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+        </Card>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
               <Collapsible open={openSections.identitas} onOpenChange={(open) => setOpenSections({ ...openSections, identitas: open })}>
                 <Card className="cursor-pointer hover:bg-muted/50  transition-colors">
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Identitas dan Waktu</CardTitle>
+                    <CardTitle className="text-md">Identitas dan Waktu</CardTitle>
                         {openSections.identitas ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -203,7 +204,7 @@ export default function FormsPage() {
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Info Outlet/Kunjungan</CardTitle>
+                    <CardTitle className="text-md">Info Outlet/Kunjungan</CardTitle>
                         {openSections.outlet ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -311,7 +312,7 @@ export default function FormsPage() {
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Kategori Aktivitas</CardTitle>
+                    <CardTitle className="text-md">Kategori Aktivitas</CardTitle>
                         {openSections.kategori ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -391,7 +392,7 @@ export default function FormsPage() {
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Produk/Segmen</CardTitle>
+                    <CardTitle className="text-md">Produk/Segmen</CardTitle>
                         {openSections.produk ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -548,7 +549,7 @@ export default function FormsPage() {
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Ringkasan & Hasil</CardTitle>
+                    <CardTitle className="text-md">Ringkasan & Hasil</CardTitle>
                         {openSections.ringkasan ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -567,7 +568,7 @@ export default function FormsPage() {
                           placeholder="Masukkan ringkasan diskusi dan hasil"
                           value={formData.ringkasanDiskusi}
                           onChange={(e) => setFormData({ ...formData, ringkasanDiskusi: e.target.value })}
-                          className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex min-h-20 w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           rows={4}
                           required
                         />
@@ -843,7 +844,7 @@ export default function FormsPage() {
                                 placeholder="Masukkan merek/model kompetitor"
                                 value={formData.merekModelKompetitor}
                                 onChange={(e) => setFormData({ ...formData, merekModelKompetitor: e.target.value })}
-                                className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex min-h-20 w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 rows={3}
                               />
                             </div>
@@ -871,7 +872,7 @@ export default function FormsPage() {
                   <CollapsibleTrigger asChild>
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">Next Action</CardTitle>
+                    <CardTitle className="text-md">Next Action</CardTitle>
                         {openSections.nextAction ? (
                           <ChevronDownIcon className="h-4 w-4 transition-transform duration-300" />
                         ) : (
@@ -901,7 +902,7 @@ export default function FormsPage() {
                           placeholder="Masukkan detail tugas lanjutan"
                           value={formData.tugasLanjutan}
                           onChange={(e) => setFormData({ ...formData, tugasLanjutan: e.target.value })}
-                          className="flex min-h-[80px] w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex min-h-20 w-full rounded-md border border-input bg-card dark:bg-muted px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           rows={4}
                         />
                       </div>
@@ -937,12 +938,14 @@ export default function FormsPage() {
                 </Card>
               </Collapsible>
 
+          <Card className="mt-6">
+            <CardContent>
               <Button type="submit" className="w-full cursor-pointer">
                 Submit Absensi
               </Button>
-            </form>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </form>
       </main>
     </div>
   )
