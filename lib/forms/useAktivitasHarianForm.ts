@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 import { AktivitasHarianFormData, OpenSections } from "./aktivitas-harian-types"
 
 const initialFormData: AktivitasHarianFormData = {
-  email: "user@example.com",
+  email: "",
   nama: "",
   area: "",
   jenisOutlet: "",
@@ -81,6 +82,27 @@ const initialOpenSections: OpenSections = {
 export function useAktivitasHarianForm() {
   const [formData, setFormData] = useState<AktivitasHarianFormData>(initialFormData)
   const [openSections, setOpenSections] = useState<OpenSections>(initialOpenSections)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          // Update form with user data from auth
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || "",
+            nama: user.user_metadata?.nama || user.email?.split('@')[0] || ""
+          }))
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+
+    fetchUserData()
+  }, [supabase])
 
   const updateFormData = (updates: Partial<AktivitasHarianFormData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
