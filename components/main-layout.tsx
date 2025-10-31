@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LogoutButton } from "@/components/logout-button"
 import { BottomNavigation } from "@/components/ui/bottom-navigation"
 import { HomeView } from "@/components/home-view"
 import { FormsView } from "@/components/forms-view"
@@ -73,8 +74,9 @@ export function MainLayout({ children, activeTab: propActiveTab }: MainLayoutPro
             </button>
             <h1 className="text-lg font-semibold capitalize">{activeTab}</h1>
           </div>
-          <div className="desktop-header-margins flex items-center">
+          <div className="desktop-header-margins flex items-center gap-2">
             <ModeToggle />
+            <LogoutButton />
           </div>
         </div>
       </header>
