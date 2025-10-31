@@ -25,7 +25,12 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/app/*": ["./app/*"],
+      "@/__tests__/fixtures/*": ["./__tests__/fixtures/*"],
+      "@/__tests__/helpers/*": ["./__tests__/helpers/*"]
     }
   },
   "include": [

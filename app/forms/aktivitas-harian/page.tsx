@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -16,12 +17,34 @@ import { useAktivitasHarianForm } from "@/lib/forms/useAktivitasHarianForm"
 
 export default function FormsPage() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
-  const { formData, setFormData, openSections, toggleSection } = useAktivitasHarianForm()
+  const { formData, setFormData, openSections, toggleSection, resetForm } = useAktivitasHarianForm()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Form submitted:", { ...formData, tanggal: selectedDate })
-    // Handle form submission logic here
+    setIsSubmitting(true)
+    try {
+      const res = await fetch('/api/submit-aktivitas-harian', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formData, selectedDate: selectedDate?.toISOString() })
+      })
+
+      const data = await res.json()
+      if (res.ok && data.success) {
+        toast.success('Form submitted successfully and saved to Google Sheets')
+        resetForm()
+        setSelectedDate(new Date())
+      } else {
+        console.error('Submission error', data)
+        toast.error('Failed to submit form: ' + (data.error || 'unknown error'))
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error('An unexpected error occurred while submitting the form.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -120,8 +143,8 @@ export default function FormsPage() {
 
           <Card className="mt-6">
             <CardContent>
-              <Button type="submit" className="w-full cursor-pointer">
-                Submit Absensi
+              <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit Absensi'}
               </Button>
             </CardContent>
           </Card>
