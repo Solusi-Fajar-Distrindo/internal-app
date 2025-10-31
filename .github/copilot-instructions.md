@@ -72,6 +72,15 @@ Business domain and data flows
 If you need to make larger architectural changes
 - Open an issue first describing the change and migration plan. Large changes to routing, theme system, or CI should be discussed.
 
+Git commit message standards
+- When using git tools (especially `mcp_gitkraken_git_add_or_commit`), always use professional commit messages following conventional commit format:
+  - Format: `type(scope): description`
+  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+  - Examples: `feat(auth): add role-based access control`, `fix(forms): resolve validation error on submit`, `docs(readme): update setup instructions`
+- Keep messages concise (50-72 characters for the subject line)
+- Use imperative mood ("add" not "added" or "adds")
+- Include detailed explanation in the commit body when needed for complex changes
+
 Last step in PRs
 - Run `npm run lint` and confirm the dev server loads without runtime errors.
 - Add a short note in the PR description listing which files were changed and how to verify manually.
