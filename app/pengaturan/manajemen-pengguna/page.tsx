@@ -33,7 +33,7 @@ export default function ManajemenPenggunaPage() {
 
   // Adapter function to convert database User to dialog User type
   const userToDialogUser = (user: User) => ({
-    id: parseInt(user.id) || 0, // Convert string UUID to number for dialog compatibility
+    id: user.id || "",
     nama: user.nama,
     email: user.email,
     password: '', // Password not stored in database
@@ -83,13 +83,30 @@ export default function ManajemenPenggunaPage() {
     setUsers(prev => [...prev, tempUser])
   }
 
-  const handleUpdateUser = (updatedUser: any) => {
-    console.log('Updating user:', updatedUser)
+  const handleUpdateUser = async (updatedUser: User) => {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          nama: updatedUser.nama,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          signature_image_url: updatedUser.signature_image_url,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', updatedUser.id)
 
-    // Update the user in the array
-    setUsers(prev => prev.map(user =>
-      user.id === updatedUser.id ? { ...user, ...updatedUser } : user
-    ))
+      if (error) {
+        console.error('Error updating user:', error)
+      } else {
+        // Update the user in the local state
+        setUsers(prev => prev.map(user =>
+          user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+        ))
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   const handleDeleteUser = async (userId: string) => {

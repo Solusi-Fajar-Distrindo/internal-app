@@ -15,16 +15,15 @@ import {
 import { Trash2 } from "lucide-react"
 
 interface User {
-  id: number
+  id: string
   nama: string
   email: string
-  password: string
   signatureImage: string | null
 }
 
 interface DeleteUserDialogProps {
   user: User
-  onDeleteUser: (userId: number) => void
+  onDeleteUser: (userId: string) => void
   trigger?: React.ReactNode
 }
 

@@ -7,12 +7,12 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 
 interface User {
-  id: number
+  id: string
   nama: string
   email: string
-  password: string
   role: string
   signatureImage: string | File | null
 }
@@ -26,17 +26,63 @@ interface EditUserDialogProps {
 export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [editedUser, setEditedUser] = useState<User>(user)
+  const [isUploadingSignature, setIsUploadingSignature] = useState(false)
+  const supabase = createClient()
 
   useEffect(() => {
     setEditedUser(user)
   }, [user])
 
-  const handleUpdateUser = () => {
-    if (!editedUser.nama || !editedUser.email || !editedUser.password || !editedUser.role) {
+  const handleUpdateUser = async () => {
+    if (!editedUser.nama || !editedUser.email || !editedUser.role) {
       return
     }
-    
-    onUpdateUser(editedUser)
+
+    let signatureImageUrl = typeof editedUser.signatureImage === 'string' ? editedUser.signatureImage : null
+
+    // Upload new signature image if a file was selected
+    if (editedUser.signatureImage && typeof editedUser.signatureImage !== 'string') {
+      setIsUploadingSignature(true)
+      try {
+        // Generate unique filename
+        const file = editedUser.signatureImage as File
+        const fileExt = file.name.split('.').pop()
+        const fileName = `signatures/${user.id}.${fileExt}`
+
+        // Upload to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from('signatures')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: true
+          })
+
+        if (uploadError) {
+          console.error('Error uploading signature:', uploadError)
+          return
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('signatures')
+          .getPublicUrl(fileName)
+
+        signatureImageUrl = publicUrl
+      } catch (error) {
+        console.error('Error uploading signature:', error)
+        return
+      } finally {
+        setIsUploadingSignature(false)
+      }
+    }
+
+    // Create updated user object with proper signature URL
+    const updatedUser = {
+      ...editedUser,
+      signatureImage: signatureImageUrl
+    }
+
+    onUpdateUser(updatedUser)
     setIsOpen(false)
   }
 
@@ -93,16 +139,7 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
               onChange={(e) => setEditedUser(prev => ({ ...prev, email: e.target.value }))}
             />
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Masukkan password"
-              value={editedUser.password}
-              onChange={(e) => setEditedUser(prev => ({ ...prev, password: e.target.value }))}
-            />
-          </div>
+
           <div className="grid gap-2">
             <Label htmlFor="role">Role</Label>
             <Select value={editedUser.role} onValueChange={(value) => setEditedUser(prev => ({ ...prev, role: value }))}>
@@ -118,6 +155,28 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
           </div>
           <div className="grid gap-2">
             <Label htmlFor="signature">Tanda Tangan</Label>
+
+            {/* Current signature preview */}
+            {editedUser.signatureImage && typeof editedUser.signatureImage === 'string' && (
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Tanda Tangan Saat Ini:</p>
+                <div className="border rounded p-2 bg-gray-50 dark:bg-gray-800">
+                  <img
+                    src={editedUser.signatureImage}
+                    alt="Current signature"
+                    className="max-w-full h-16 object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="hidden text-xs text-muted-foreground text-center py-2">
+                    Gambar tidak dapat dimuat
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-2">
               <Input
                 id="signature"
@@ -161,10 +220,10 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
           <Button 
             type="button" 
             onClick={handleUpdateUser}
-            disabled={!editedUser.nama || !editedUser.email || !editedUser.password || !editedUser.role}
+            disabled={!editedUser.nama || !editedUser.email || !editedUser.role || isUploadingSignature}
             className="cursor-pointer"
           >
-            Simpan Perubahan
+            {isUploadingSignature ? "Mengunggah..." : "Simpan Perubahan"}
           </Button>
         </DialogFooter>
       </DialogContent>
