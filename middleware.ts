@@ -34,6 +34,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
+  // Role-based access control for management routes
+  const protectedRoutes = ['/pengaturan/manajemen-pengguna']
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+
+  if (isProtectedRoute && user) {
+    const userRole = user.user_metadata?.role
+    if (!['backoffice', 'superuser'].includes(userRole)) {
+      // Redirect unauthorized users to home page
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  }
+
   return NextResponse.next()
 }
 

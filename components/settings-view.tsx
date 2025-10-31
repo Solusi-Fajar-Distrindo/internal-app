@@ -4,17 +4,40 @@ import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, User, Bell } from "lucide-react"
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
 
 export function SettingsView() {
   const router = useRouter()
+  const [userRole, setUserRole] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getUserRole = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          setUserRole(user.user_metadata.role)
+        }
+      } catch (error) {
+        console.error('Error getting user role:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    getUserRole()
+  }, [supabase])
 
   const settings = [
-    {
+    // Only include management settings for authorized roles
+    ...(userRole && ['backoffice', 'superuser'].includes(userRole) ? [{
       title: "Manajemen Pengguna",
       description: "Kelola akun pengguna dan izin akses",
       content: "Tambah, edit, atau hapus pengguna dan konfigurasi tingkat akses",
       icon: Users
-    },
+    }] : []),
     {
       title: "Akun Saya",
       description: "Kelola pengaturan akun Anda",
@@ -29,6 +52,29 @@ export function SettingsView() {
       badge: "Segera Tiba"
     }
   ]
+
+  if (loading) {
+    return (
+      <div className="slide-up">
+        <main className="p-4 pt-0">
+          <section className="prose mx-auto max-w-none text-center sm:text-left mb-6">
+            <h2 className="text-2xl font-semibold text-black dark:text-zinc-50">Pengaturan</h2>
+            <p className="text-zinc-600 dark:text-zinc-400">Kelola preferensi aplikasi Anda</p>
+          </section>
+          <section className="grid gap-3">
+            <Card>
+              <CardContent className="flex items-center justify-center py-8">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
+                  <p className="text-muted-foreground">Memuat pengaturan...</p>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="slide-up">

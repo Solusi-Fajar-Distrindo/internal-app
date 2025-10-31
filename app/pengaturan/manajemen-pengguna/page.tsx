@@ -29,6 +29,8 @@ export default function ManajemenPenggunaPage() {
   const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
+  const [authorized, setAuthorized] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
   const supabase = createClient()
 
   // Adapter function to convert database User to dialog User type
@@ -41,8 +43,33 @@ export default function ManajemenPenggunaPage() {
     signatureImage: user.signature_image_url || null
   })
 
+  // Check user authorization
+  useEffect(() => {
+    const checkAuthorization = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user || !['backoffice', 'superuser'].includes(user.user_metadata.role)) {
+          router.push('/')
+          return
+        }
+
+        setUserRole(user.user_metadata.role)
+        setAuthorized(true)
+      } catch (error) {
+        console.error('Error checking authorization:', error)
+        setLoading(false) // Stop loading on error
+        router.push('/')
+      }
+    }
+
+    checkAuthorization()
+  }, [supabase, router])
+
   // Fetch users from Supabase
   useEffect(() => {
+    if (!authorized) return
+
     const fetchUsers = async () => {
       try {
         const { data, error } = await supabase
@@ -64,7 +91,7 @@ export default function ManajemenPenggunaPage() {
     }
 
     fetchUsers()
-  }, [supabase])
+  }, [supabase, authorized])
 
 
 
@@ -193,6 +220,28 @@ export default function ManajemenPenggunaPage() {
       console.error('Error:', error)
       // You might want to show an error toast notification here
     }
+  }
+
+  // Show loading or unauthorized state
+  if (!authorized) {
+    return (
+      <div className="slide-up">
+        <MainHeader
+          title="Manajemen Pengguna"
+          description="Kelola akun pengguna dan izin akses"
+        />
+        <main className="desktop-content-margins p-4 pt-0">
+          <Card>
+            <CardContent className="flex items-center justify-center py-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto mb-2"></div>
+                <p className="text-muted-foreground">Memeriksa izin akses...</p>
+              </div>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    )
   }
 
   return (
