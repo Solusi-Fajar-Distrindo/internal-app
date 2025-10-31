@@ -55,7 +55,15 @@ export default function FormsPage() {
     },
     produkLainnya: "",
     minatOppLevel: "",
-    kuantitas: "",
+    kuantitas: {
+      kasa: "",
+      kertas: "",
+      pouch: "",
+      pensil: "",
+      collagen: "",
+      apron: "",
+      lainnya: ""
+    },
     ringkasanDiskusi: "",
     statusTahap: {
       prospek: false,
@@ -529,15 +537,124 @@ export default function FormsPage() {
                       </div>
 
                       {/* Kuantitas/Estimasi Nilai */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-medium">Kuantitas/Estimasi Nilai per Produk</Label>
+                    {formData.produkDibahas.kasa && (
                       <div className="space-y-2">
-                        <Label htmlFor="kuantitas">Kuantitas/Estimasi Nilai</Label>
+                        <Label htmlFor="kuantitas-kasa">Kuantitas Kasa</Label>
                         <Input
-                          id="kuantitas"
+                          id="kuantitas-kasa"
                           type="text"
-                          placeholder="Masukkan kuantitas/estimasi nilai"
-                          value={formData.kuantitas}
-                          onChange={(e) => setFormData({ ...formData, kuantitas: e.target.value })}
+                          placeholder="Masukkan kuantitas/estimasi nilai kasa"
+                          value={formData.kuantitas.kasa}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, kasa: e.target.value }
+                          })}
                         />
+                      </div>
+                    )}
+                    {formData.produkDibahas.kertas && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-kertas">Kuantitas Kertas</Label>
+                        <Input
+                          id="kuantitas-kertas"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai kertas"
+                          value={formData.kuantitas.kertas}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, kertas: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {formData.produkDibahas.pouch && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-pouch">Kuantitas Pouch</Label>
+                        <Input
+                          id="kuantitas-pouch"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai pouch"
+                          value={formData.kuantitas.pouch}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, pouch: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {formData.produkDibahas.pensil && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-pensil">Kuantitas Pensil</Label>
+                        <Input
+                          id="kuantitas-pensil"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai pensil"
+                          value={formData.kuantitas.pensil}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, pensil: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {formData.produkDibahas.collagen && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-collagen">Kuantitas Collagen</Label>
+                        <Input
+                          id="kuantitas-collagen"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai collagen"
+                          value={formData.kuantitas.collagen}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, collagen: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {formData.produkDibahas.apron && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-apron">Kuantitas Apron</Label>
+                        <Input
+                          id="kuantitas-apron"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai apron"
+                          value={formData.kuantitas.apron}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, apron: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {formData.produkDibahas.lainnya && (
+                      <div className="space-y-2">
+                        <Label htmlFor="kuantitas-lainnya">Kuantitas {formData.produkLainnya || 'Lainnya'}</Label>
+                        <Input
+                          id="kuantitas-lainnya"
+                          type="text"
+                          placeholder="Masukkan kuantitas/estimasi nilai produk lainnya"
+                          value={formData.kuantitas.lainnya}
+                          onChange={(e) => setFormData({
+                            ...formData,
+                            kuantitas: { ...formData.kuantitas, lainnya: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+                    {!formData.produkDibahas.kasa &&
+                      !formData.produkDibahas.kertas &&
+                      !formData.produkDibahas.pouch &&
+                      !formData.produkDibahas.pensil &&
+                      !formData.produkDibahas.collagen &&
+                      !formData.produkDibahas.apron &&
+                      !formData.produkDibahas.lainnya && (
+                        <p className="text-sm text-muted-foreground italic">
+                          Pilih minimal satu produk untuk mengisi kuantitas
+                        </p>
+                      )}
                       </div>
                     </CardContent>
                   </CollapsibleContent>
