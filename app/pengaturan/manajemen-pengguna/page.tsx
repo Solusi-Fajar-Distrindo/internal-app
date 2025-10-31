@@ -68,19 +68,45 @@ export default function ManajemenPenggunaPage() {
 
 
 
-  const handleAddUser = (newUser: any) => {
-    // Here you would typically send the data to your API
-    console.log('Adding user:', newUser)
-    
-    // For now, just add to the users array with a new ID
-    const tempUser: User = {
-      id: `temp-${Date.now()}`,
-      nama: newUser.nama,
-      email: newUser.email,
-      role: newUser.role,
-      signature_image_url: newUser.signatureImage || "/api/placeholder/150/50"
+  const handleAddUser = async (newUser: any) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newUser),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('Error adding user:', result.error)
+        // You might want to show a toast notification here
+        return
+      }
+
+      console.log('User added successfully:', result)
+
+      // Refresh the users list to show the newly created user
+      const { data: updatedUsers, error } = await supabase
+        .from('users')
+        .select('*')
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error refreshing users:', error)
+      } else {
+        setUsers(updatedUsers || [])
+      }
+
+  // You might want to show a success toast notification here
+
+    } catch (error) {
+      console.error('Error:', error)
+    // You might want to show an error toast notification here
     }
-    setUsers(prev => [...prev, tempUser])
   }
 
   const handleUpdateUser = async (updatedUser: User) => {
@@ -127,21 +153,46 @@ export default function ManajemenPenggunaPage() {
     }
   }
 
-  const handleAddMultipleUsers = (emails: string[]) => {
-    console.log('Adding multiple users:', emails)
+  const handleAddMultipleUsers = async (emails: string[]) => {
+    try {
+      const response = await fetch('/api/users/batch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ emails }),
+      })
 
-    // Create users from emails with default role
-    const newUsers: User[] = emails.map((email, index) => {
-      return {
-        id: `temp-multi-${Date.now()}-${index}`,
-        nama: email.split('@')[0], // Use email prefix as name
-        email: email,
-        role: "lapangan", // Default role
-        signature_image_url: "/api/placeholder/150/50"
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('Error adding multiple users:', result.error)
+        // You might want to show a toast notification here
+        return
       }
-    })
 
-    setUsers(prev => [...prev, ...newUsers])
+      console.log('Multiple users result:', result)
+
+      // Refresh the users list to show the newly created users
+      const { data: updatedUsers, error } = await supabase
+        .from('users')
+        .select('*')
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error refreshing users:', error)
+      } else {
+        setUsers(updatedUsers || [])
+      }
+
+      // You might want to show a success toast notification here
+      // with details about how many succeeded/failed from result.results
+
+    } catch (error) {
+      console.error('Error:', error)
+      // You might want to show an error toast notification here
+    }
   }
 
   return (

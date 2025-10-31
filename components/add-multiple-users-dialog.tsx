@@ -13,17 +13,18 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Plus, Users } from "lucide-react"
+import { Plus, Users, Loader2 } from "lucide-react"
 
 interface AddMultipleUsersDialogProps {
-  onAddMultipleUsers: (emails: string[]) => void
+  onAddMultipleUsers: (emails: string[]) => Promise<void>
 }
 
 export function AddMultipleUsersDialog({ onAddMultipleUsers }: AddMultipleUsersDialogProps) {
   const [open, setOpen] = useState(false)
   const [emails, setEmails] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     // Split emails by line break and filter out empty lines
@@ -36,9 +37,18 @@ export function AddMultipleUsersDialog({ onAddMultipleUsers }: AddMultipleUsersD
       return
     }
     
-    onAddMultipleUsers(emailArray)
-    setEmails("")
-    setOpen(false)
+    setIsSubmitting(true)
+
+    try {
+      await onAddMultipleUsers(emailArray)
+      setEmails("")
+      setOpen(false)
+    } catch (error) {
+      console.error('Error adding multiple users:', error)
+      // You might want to show an error toast here
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -79,11 +89,24 @@ user3@example.com`}
           </div>
           
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="cursor-pointer">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              className="cursor-pointer"
+              disabled={isSubmitting}
+            >
               Batal
             </Button>
-            <Button type="submit" className="cursor-pointer">
-              Tambah {emails.split('\n').filter(email => email.trim()).length} Pengguna
+            <Button type="submit" className="cursor-pointer" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Menambahkan...
+                </>
+              ) : (
+                `Tambah ${emails.split('\n').filter(email => email.trim()).length} Pengguna`
+              )}
             </Button>
           </DialogFooter>
         </form>
