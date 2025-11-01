@@ -23,6 +23,10 @@ import {
   expectValidationError,
   expectServerError,
   expectDuplicateEmailError,
+  expectEmailFormatError,
+  expectRoleValidationError,
+  expectBusinessLogicError,
+  expectSecurityValidationError,
   setupTestEnvironment,
   cleanupTestEnvironment
 } from '../../../helpers/supabase-test-utils'
@@ -177,6 +181,47 @@ describe('POST /api/users', () => {
       const response = await POST(request)
       
       await expectValidationError(response)
+    })
+
+    it('should return 400 when email format is invalid', async () => {
+      const invalidEmailData = testDataFactory.invalidEmailFormat()
+      const request = createMockRequest(invalidEmailData[0])
+      const response = await POST(request)
+      
+      await expectEmailFormatError(response)
+    })
+
+    it('should return 400 when role is invalid', async () => {
+      const invalidRoleData = testDataFactory.invalidRoleFormat()
+      const request = createMockRequest(invalidRoleData[0])
+      const response = await POST(request)
+      
+      await expectRoleValidationError(response)
+    })
+
+    it('should return 400 when nama contains special characters', async () => {
+      const specialCharacterData = testDataFactory.specialCharacterNama()
+      const request = createMockRequest(specialCharacterData[0])
+      const response = await POST(request)
+      
+      await expectSecurityValidationError(response)
+    })
+
+    it('should return 400 when email already exists in system', async () => {
+      // This test would need to mock the database check for existing email
+      // For now, we'll test the validation layer
+      const existingEmailData = testDataFactory.validBackofficeUser()
+      const request = createMockRequest(existingEmailData)
+      
+      // Mock admin client to simulate existing email error
+      const mockAdmin = mockCreateAdminClient(createErrorUserResponse('User already exists'))
+      mockCreateAdminClientFn.mockReturnValue(mockAdmin)
+      
+      const response = await POST(request)
+      
+      expect(response.status).toBe(400)
+      const jsonResponse = await response.json()
+      expect(jsonResponse.error).toBe('User already exists')
     })
   })
 
@@ -358,6 +403,104 @@ describe('POST /api/users', () => {
     })
   })
 
+  })
+
+  describe('Business Logic Validation', () => {
+    it('should return 403 when backoffice tries to create superuser', async () => {
+      // Mock authenticated backoffice user
+      const backofficeUser = createAuthenticatedUser('backoffice')
+      const mockClient = mockCreateClient(backofficeUser)
+      mockCreateClientFn.mockResolvedValue(mockClient)
+      
+      // Test data: backoffice user trying to create superuser
+      const userData = {
+        nama: 'Test User',
+        email: 'test@example.com',
+        password: 'ValidPassword123!',
+        role: 'superuser' as const
+      }
+      const request = createMockRequest(userData)
+      const response = await POST(request)
+      
+      await expectBusinessLogicError(response, 'Backoffice cannot create superuser')
+    })
+
+    it('should return 403 when lapangan tries to create any user', async () => {
+      // Mock authenticated lapangan user
+      const lapanganUser = createAuthenticatedUser('lapangan')
+      const mockClient = mockCreateClient(lapanganUser)
+      mockCreateClientFn.mockResolvedValue(mockClient)
+      
+      // Test data: lapangan user trying to create backoffice user
+      const userData = testDataFactory.validBackofficeUser()
+      const request = createMockRequest(userData)
+      const response = await POST(request)
+      
+      await expectBusinessLogicError(response, 'Insufficient permissions')
+    })
+
+    it('should allow backoffice to create backoffice user', async () => {
+      // Mock authenticated backoffice user
+      const backofficeUser = createAuthenticatedUser('backoffice')
+      const mockClient = mockCreateClient(backofficeUser)
+      mockCreateClientFn.mockResolvedValue(mockClient)
+      
+      // Mock successful user creation
+      const newUser = mockUsers.newUser
+      const mockAdmin = mockCreateAdminClient(createSuccessUserResponse(newUser))
+      mockCreateAdminClientFn.mockReturnValue(mockAdmin)
+      
+      const userData = testDataFactory.validBackofficeUser()
+      const request = createMockRequest(userData)
+      const response = await POST(request)
+      
+      await expectUserCreationSuccess(response, userData)
+    })
+
+    it('should allow superuser to create any user', async () => {
+      // Mock authenticated superuser
+      const superuser = createAuthenticatedUser('superuser')
+      const mockClient = mockCreateClient(superuser)
+      mockCreateClientFn.mockResolvedValue(mockClient)
+      
+      // Mock successful user creation
+      const newUser = mockUsers.newUser
+      const mockAdmin = mockCreateAdminClient(createSuccessUserResponse(newUser))
+      mockCreateAdminClientFn.mockReturnValue(mockAdmin)
+      
+      const userData = testDataFactory.validLapanganUser()
+      const request = createMockRequest(userData)
+      const response = await POST(request)
+      
+      expect(response.status).toBe(200)
+    })
+  })
+
+  describe('Security Validation', () => {
+    beforeEach(() => {
+      // Mock authenticated admin user for security tests
+      const adminUser = createAuthenticatedUser('superuser')
+      const mockClient = mockCreateClient(adminUser)
+      mockCreateClientFn.mockResolvedValue(mockClient)
+    })
+
+    it('should return 400 when nama contains XSS attempt', async () => {
+      const xssData = testDataFactory.xssAttempt()
+      const request = createMockRequest(xssData)
+      const response = await POST(request)
+      
+      await expectSecurityValidationError(response)
+    })
+
+    it('should return 400 when nama contains SQL injection attempt', async () => {
+      const sqlData = testDataFactory.sqlInjectionAttempt()
+      const request = createMockRequest(sqlData)
+      const response = await POST(request)
+      
+      await expectSecurityValidationError(response)
+    })
+  })
+
   describe('Integration with Database Trigger', () => {
     beforeEach(() => {
       // Mock authenticated admin user
@@ -392,4 +535,3 @@ describe('POST /api/users', () => {
       })
     })
   })
-})

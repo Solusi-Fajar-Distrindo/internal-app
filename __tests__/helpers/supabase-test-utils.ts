@@ -88,6 +88,157 @@ export const createEmptyStringData = (): Partial<TestUserData> => {
   }
 }
 
+// Helper to create user data with invalid email formats
+export const createInvalidEmailFormatData = (): TestUserData[] => {
+  return [
+    createValidUserData({
+      nama: 'Test User',
+      email: 'invalid-email', // Missing @ symbol
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@', // Incomplete email
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: '@example.com', // Missing local part
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test.example', // Missing TLD
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@.com', // Missing domain
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test test@example.com', // Space in email
+      role: 'backoffice'
+    })
+  ]
+}
+
+// Helper to create user data with invalid roles
+export const createInvalidRolesData = (): TestUserData[] => {
+  return [
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'admin' as 'superuser' | 'backoffice' | 'lapangan', // Not in allowed roles
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'manager' as 'superuser' | 'backoffice' | 'lapangan', // Not in allowed roles
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: '' as 'superuser' | 'backoffice' | 'lapangan', // Empty role
+    }),
+    createValidUserData({
+      nama: 'Test User',
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: undefined // Null role
+    })
+  ]
+}
+
+// Helper to create user data with special characters in nama
+export const createSpecialCharacterNamaData = (): TestUserData[] => {
+  return [
+    createValidUserData({
+      nama: '<script>alert("xss")</script>', // XSS attempt
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: "'; DROP TABLE users; --", // SQL injection attempt
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test<br>User', // HTML tag attempt
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'backoffice'
+    }),
+    createValidUserData({
+      nama: 'Test|User', // Pipe character (potentially problematic)
+      email: 'test@example.com',
+      password: 'ValidPassword123!',
+      role: 'backoffice'
+    })
+  ]
+}
+
+// Helper to create XSS attempt data
+export const createXSSAttemptData = (): TestUserData => {
+  return createValidUserData({
+    nama: '<script>alert("xss")</script>',
+    email: 'test@example.com',
+    password: 'ValidPassword123!',
+    role: 'backoffice'
+  })
+}
+
+// Helper to create SQL injection attempt data
+export const createSQLInjectionAttemptData = (): TestUserData => {
+  return createValidUserData({
+    nama: "'; DROP TABLE users; --",
+    email: 'test@example.com',
+    password: 'ValidPassword123!',
+    role: 'backoffice'
+  })
+}
+
+// Helper to create business logic validation data
+export const createBusinessLogicTestData = {
+  // Test role hierarchy: backoffice user trying to create superuser
+  backofficeCreatingSuperuser: {
+    creatorRole: 'backoffice',
+    targetUserRole: 'superuser',
+    shouldFail: true,
+    description: 'Backoffice cannot create superuser'
+  },
+  
+  // Test role hierarchy: lapangan user trying to create any user
+  lapanganCreatingUser: {
+    creatorRole: 'lapangan',
+    targetUserRole: 'backoffice',
+    shouldFail: true,
+    description: 'Lapangan cannot create users'
+  },
+  
+  // Test role hierarchy: backoffice creating backoffice (should succeed)
+  backofficeCreatingBackoffice: {
+    creatorRole: 'backoffice',
+    targetUserRole: 'backoffice',
+    shouldFail: false,
+    description: 'Backoffice can create backoffice'
+  },
+  
+  // Test role hierarchy: superuser creating any user (should succeed)
+  superuserCreatingUser: {
+    creatorRole: 'superuser',
+    targetUserRole: 'lapangan',
+    shouldFail: false,
+    description: 'Superuser can create any user'
+  }
+}
+
 // Helper to assert successful user creation response
 export const expectUserCreationSuccess = async (response: TestResponse, expectedUser: Partial<TestUserData>) => {
   expect(response.status).toBe(200)
@@ -145,6 +296,51 @@ export const expectDuplicateEmailError = async (response: TestResponse) => {
   ).toBe(true)
 }
 
+// Helper to assert email format validation error
+export const expectEmailFormatError = async (response: TestResponse) => {
+  expect(response.status).toBe(400)
+  
+  const jsonResponse = await response.json()
+  expect(jsonResponse).toHaveProperty('error')
+  expect(jsonResponse.error).toBe('Invalid email format')
+}
+
+// Helper to assert password strength validation error
+export const expectPasswordStrengthError = async (response: TestResponse) => {
+  expect(response.status).toBe(400)
+  
+  const jsonResponse = await response.json()
+  expect(jsonResponse).toHaveProperty('error')
+  expect(jsonResponse.error).toBe('Password is too weak')
+}
+
+// Helper to assert role validation error
+export const expectRoleValidationError = async (response: TestResponse) => {
+  expect(response.status).toBe(400)
+  
+  const jsonResponse = await response.json()
+  expect(jsonResponse).toHaveProperty('error')
+  expect(jsonResponse.error).toBe('Invalid role')
+}
+
+// Helper to assert business logic validation error
+export const expectBusinessLogicError = async (response: TestResponse, expectedMessage: string) => {
+  expect(response.status).toBe(403)
+  
+  const jsonResponse = await response.json()
+  expect(jsonResponse).toHaveProperty('error')
+  expect(jsonResponse.error).toBe(expectedMessage)
+}
+
+// Helper to assert security validation error (XSS/SQL injection)
+export const expectSecurityValidationError = async (response: TestResponse) => {
+  expect(response.status).toBe(400)
+  
+  const jsonResponse = await response.json()
+  expect(jsonResponse).toHaveProperty('error')
+  expect(jsonResponse.error).toBe('Invalid input data')
+}
+
 // Test data factory for different scenarios
 export const testDataFactory = {
   // Valid user creation data
@@ -165,6 +361,8 @@ export const testDataFactory = {
     email: 'lapangan@example.com',
     role: 'lapangan'
   }),
+
+  bussinessLogicTest: (): Record<string, Record<string, string | boolean>> => createBusinessLogicTestData,
   
   // Invalid data scenarios
   missingNama: (): Partial<TestUserData> => createInvalidUserData('nama'),
@@ -172,6 +370,11 @@ export const testDataFactory = {
   missingPassword: (): Partial<TestUserData> => createInvalidUserData('password'),
   missingRole: (): Partial<TestUserData> => createInvalidUserData('role'),
   invalidEmail: (): TestUserData => createInvalidEmailData(),
+  invalidEmailFormat: (): TestUserData[] => createInvalidEmailFormatData(),
+  invalidRoleFormat: (): TestUserData[] => createInvalidRolesData(),
+  specialCharacterNama: (): TestUserData[] => createSpecialCharacterNamaData(),
+  xssAttempt: (): TestUserData => createXSSAttemptData(),
+  sqlInjectionAttempt: (): TestUserData => createSQLInjectionAttemptData(),
   invalidRole: (): TestUserData => createInvalidRoleData(),
   emptyFields: (): Partial<TestUserData> => createEmptyStringData()
 }

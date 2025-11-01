@@ -2,13 +2,31 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Security validation for nama field
+const validateNama = (nama: string): boolean => {
+  // Check for potentially dangerous characters/patterns
+  const dangerousPatterns = [
+    /<script/i,
+    /javascript:/i,
+    /on\w+\s*=/i,
+    /['"]\s*;\s*drop/i,
+    /union\s+select/i,
+    /insert\s+into/i,
+    /delete\s+from/i,
+    /update\s+set/i
+  ]
+  
+  return !dangerousPatterns.some(pattern => pattern.test(nama))
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Verify the current user is authenticated and is an admin
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    console.log('user', user)
 
     if (authError || !user) {
       return NextResponse.json(
@@ -35,6 +53,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Email format validation
+    if (!EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      )
+    }
+
+    // Role validation
+    const validRoles = ['superuser', 'backoffice', 'lapangan']
+    if (!validRoles.includes(role)) {
+      return NextResponse.json(
+        { error: 'Invalid role' },
+        { status: 400 }
+      )
+    }
+
+    // Security validation for nama
+    if (!validateNama(nama)) {
+      return NextResponse.json(
+        { error: 'Invalid input data' },
+        { status: 400 }
+      )
+    }
+
+    // Business logic validation: role hierarchy
+    const currentUserRole = user.user_metadata.role
+    
+    // Backoffice users cannot create superuser users
+    if (currentUserRole === 'backoffice' && role === 'superuser') {
+      return NextResponse.json(
+        { error: 'Backoffice cannot create superuser' },
+        { status: 403 }
+      )
+    }
+
     // Create user using admin client
     const adminClient = createAdminClient()
     const { data: authData, error: createError } = await adminClient.auth.admin.createUser({
@@ -48,6 +102,13 @@ export async function POST(request: NextRequest) {
     })
 
     if (createError) {
+      // Check for duplicate email error
+      if (createError.message.includes('already registered') || createError.message.includes('duplicate')) {
+        return NextResponse.json(
+          { error: 'User already registered' },
+          { status: 400 }
+        )
+      }
       return NextResponse.json(
         { error: createError.message },
         { status: 400 }
