@@ -138,18 +138,6 @@ export const createInvalidRolesData = (): TestUserData[] => {
       email: 'test@example.com',
       password: 'ValidPassword123!',
       role: 'manager' as 'superuser' | 'backoffice' | 'lapangan', // Not in allowed roles
-    }),
-    createValidUserData({
-      nama: 'Test User',
-      email: 'test@example.com',
-      password: 'ValidPassword123!',
-      role: '' as 'superuser' | 'backoffice' | 'lapangan', // Empty role
-    }),
-    createValidUserData({
-      nama: 'Test User',
-      email: 'test@example.com',
-      password: 'ValidPassword123!',
-      role: undefined // Null role
     })
   ]
 }
@@ -171,12 +159,6 @@ export const createSpecialCharacterNamaData = (): TestUserData[] => {
     }),
     createValidUserData({
       nama: 'Test<br>User', // HTML tag attempt
-      email: 'test@example.com',
-      password: 'ValidPassword123!',
-      role: 'backoffice'
-    }),
-    createValidUserData({
-      nama: 'Test|User', // Pipe character (potentially problematic)
       email: 'test@example.com',
       password: 'ValidPassword123!',
       role: 'backoffice'

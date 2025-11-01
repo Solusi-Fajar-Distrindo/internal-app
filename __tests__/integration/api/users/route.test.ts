@@ -185,26 +185,38 @@ describe('POST /api/users', () => {
 
     it('should return 400 when email format is invalid', async () => {
       const invalidEmailData = testDataFactory.invalidEmailFormat()
-      const request = createMockRequest(invalidEmailData[0])
-      const response = await POST(request)
       
-      await expectEmailFormatError(response)
+      // Test each invalid email scenario
+      for (const testData of invalidEmailData) {
+        const request = createMockRequest(testData)
+        const response = await POST(request)
+        
+        await expectEmailFormatError(response)
+      }
     })
 
     it('should return 400 when role is invalid', async () => {
       const invalidRoleData = testDataFactory.invalidRoleFormat()
-      const request = createMockRequest(invalidRoleData[0])
-      const response = await POST(request)
       
-      await expectRoleValidationError(response)
+      // Test each invalid role scenario
+      for (const testData of invalidRoleData) {
+        const request = createMockRequest(testData)
+        const response = await POST(request)
+        
+        await expectRoleValidationError(response)
+      }
     })
 
     it('should return 400 when nama contains special characters', async () => {
       const specialCharacterData = testDataFactory.specialCharacterNama()
-      const request = createMockRequest(specialCharacterData[0])
-      const response = await POST(request)
       
-      await expectSecurityValidationError(response)
+      // Test each special character scenario
+      for (const testData of specialCharacterData) {
+        const request = createMockRequest(testData)
+        const response = await POST(request)
+        
+        await expectSecurityValidationError(response)
+      }
     })
 
     it('should return 400 when email already exists in system', async () => {

@@ -10,6 +10,7 @@ const validateNama = (nama: string): boolean => {
   // Check for potentially dangerous characters/patterns
   const dangerousPatterns = [
     /<script/i,
+    /<[^>]*>/, // General HTML tags (catches <br>, <div>, etc.)
     /javascript:/i,
     /on\w+\s*=/i,
     /['"]\s*;\s*drop/i,
