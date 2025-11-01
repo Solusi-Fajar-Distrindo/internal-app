@@ -55,12 +55,21 @@ export function LoginForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
+      <div className="flex justify-center mb-6">
+        <div className="w-48 h-auto sm:w-56">
+          <img
+            src="/logo/SFD_Logo_Full_Transparent_BW.svg"
+            alt="Solusi Fajar Distrindo Logo"
+            className="w-full h-full object-contain dark:invert"
+          />
+        </div>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Masuk ke akun Anda</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Masukkan email Anda di bawah untuk masuk ke akun
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -71,7 +80,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="email@contoh.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
