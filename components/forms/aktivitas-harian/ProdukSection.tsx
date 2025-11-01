@@ -2,6 +2,7 @@
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
@@ -112,7 +113,10 @@ export function ProdukSection({ formData, setFormData }: FormSectionProps) {
 
       {/* Minat/Opp Level */}
       <div className="space-y-2">
-        <Label htmlFor="minatOppLevel">Minat/Opp Level</Label>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="minatOppLevel">Minat/Opp Level</Label>
+          <Badge variant="secondary" className="text-xs">Opsional</Badge>
+        </div>
         <Select value={formData.minatOppLevel} onValueChange={(value) => setFormData({ ...formData, minatOppLevel: value })}>
           <SelectTrigger>
             <SelectValue placeholder="Pilih minat/opportunity level" />
@@ -127,7 +131,10 @@ export function ProdukSection({ formData, setFormData }: FormSectionProps) {
 
       {/* Kuantitas/Estimasi Nilai */}
       <div className="space-y-3">
-        <Label className="text-base font-medium">Kuantitas/Estimasi Nilai per Produk</Label>
+        <div className="flex items-center gap-2">
+          <Label className="text-base font-medium">Kuantitas/Estimasi Nilai per Produk</Label>
+          <Badge variant="secondary" className="text-xs">Opsional</Badge>
+        </div>
         {formData.produkDibahas.kasa && (
           <div className="space-y-2">
             <Label htmlFor="kuantitas-kasa">Kuantitas Kasa</Label>

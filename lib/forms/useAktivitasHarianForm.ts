@@ -129,9 +129,23 @@ export function useAktivitasHarianForm() {
     }))
   }
 
-  const resetForm = () => {
+  const resetForm = async () => {
     setFormData(initialFormData)
     setOpenSections(initialOpenSections)
+    
+    // Re-fetch user data to populate email and name
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setFormData(prev => ({
+          ...prev,
+          email: user.email || "",
+          nama: user.user_metadata?.nama || user.email?.split('@')[0] || ""
+        }))
+      }
+    } catch (error) {
+      console.error('Error fetching user data during reset:', error)
+    }
   }
 
   return {

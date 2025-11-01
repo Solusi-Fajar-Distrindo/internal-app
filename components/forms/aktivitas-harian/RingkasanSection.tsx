@@ -2,6 +2,7 @@
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
@@ -142,7 +143,10 @@ export function RingkasanSection({ formData, setFormData }: FormSectionProps) {
 
       {/* Kebutuhan Dokumen */}
       <div className="space-y-3">
-        <Label className="text-base font-medium">Kebutuhan Dokumen</Label>
+        <div className="flex items-center gap-2">
+          <Label className="text-base font-medium">Kebutuhan Dokumen</Label>
+          <Badge variant="secondary" className="text-xs">Opsional</Badge>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -218,7 +222,10 @@ export function RingkasanSection({ formData, setFormData }: FormSectionProps) {
       {/* Competitor Info */}
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="competitorDisebut">Competitor Disebut?</Label>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="competitorDisebut">Competitor Disebut?</Label>
+            <Badge variant="secondary" className="text-xs">Opsional</Badge>
+          </div>
           <Select value={formData.competitorDisebut} onValueChange={(value) => setFormData({ ...formData, competitorDisebut: value })}>
             <SelectTrigger>
               <SelectValue placeholder="Pilih opsi" />
@@ -233,7 +240,10 @@ export function RingkasanSection({ formData, setFormData }: FormSectionProps) {
         {formData.competitorDisebut === "Ya" && (
           <>
             <div className="space-y-2">
-              <Label htmlFor="merekModelKompetitor">Merek/Model Kompetitor</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="merekModelKompetitor">Merek/Model Kompetitor</Label>
+                <Badge variant="secondary" className="text-xs">Opsional</Badge>
+              </div>
               <textarea
                 id="merekModelKompetitor"
                 placeholder="Masukkan merek/model kompetitor"
@@ -245,7 +255,10 @@ export function RingkasanSection({ formData, setFormData }: FormSectionProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="hargaKompetitor">Harga Kompetitor</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="hargaKompetitor">Harga Kompetitor</Label>
+                <Badge variant="secondary" className="text-xs">Opsional</Badge>
+              </div>
               <Input
                 id="hargaKompetitor"
                 type="text"

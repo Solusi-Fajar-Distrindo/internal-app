@@ -16,6 +16,7 @@ import { NextActionSection } from "@/components/forms/aktivitas-harian/NextActio
 import { useAktivitasHarianForm } from "@/lib/forms/useAktivitasHarianForm"
 
 export default function FormsPage() {
+  const router = useRouter()
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const { formData, setFormData, openSections, toggleSection, resetForm } = useAktivitasHarianForm()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -33,8 +34,7 @@ export default function FormsPage() {
       const data = await res.json()
       if (res.ok && data.success) {
         toast.success('Form submitted successfully and saved to Google Sheets')
-        resetForm()
-        setSelectedDate(new Date())
+        router.push('/forms/aktivitas-harian/sukses')
       } else {
         console.error('Submission error', data)
         toast.error('Failed to submit form: ' + (data.error || 'unknown error'))

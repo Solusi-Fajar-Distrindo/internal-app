@@ -2,6 +2,7 @@
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
@@ -91,14 +92,16 @@ export function OutletInfoSection({ formData, setFormData }: FormSectionProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="emailPic">Email PIC</Label>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="emailPic">Email PIC</Label>
+          <Badge variant="secondary" className="text-xs">Opsional</Badge>
+        </div>
         <Input
           id="emailPic"
           type="email"
           placeholder="Masukkan email PIC"
           value={formData.emailPic}
           onChange={(e) => setFormData({ ...formData, emailPic: e.target.value })}
-          required
         />
       </div>
     </div>
