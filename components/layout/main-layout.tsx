@@ -2,11 +2,11 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
-import { LogoutButton } from "@/components/logout-button"
-import { BottomNavigation } from "@/components/ui/bottom-navigation"
-import { HomeView } from "@/components/home-view"
-import { FormsView } from "@/components/forms-view"
-import { SettingsView } from "@/components/settings-view"
+import { LogoutButton } from "@/components/auth/logout-button"
+import { BottomNavigation } from "@/components/layout/bottom-navigation"
+import { HomeView } from "@/components/views/home-view"
+import { FormsView } from "@/components/views/forms-view"
+import { SettingsView } from "@/components/views/settings-view"
 import Image from "next/image"
 
 interface MainLayoutProps {

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MainHeader } from "@/components/main-header"
+import { MainHeader } from "@/components/layout/main-header"
 import { CheckCircle } from "lucide-react"
 
 export default function SuksesPage() {

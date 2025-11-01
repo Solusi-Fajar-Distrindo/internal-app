@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { MainHeader } from "@/components/main-header"
+import { MainHeader } from "@/components/layout/main-header"
 import {
   AlertDialog,
   AlertDialogAction,
