@@ -65,7 +65,6 @@ const initialFormData: AktivitasHarianFormData = {
   competitorDisebut: "",
   merekModelKompetitor: "",
   hargaKompetitor: "",
-  nextAction: "",
   tugasLanjutan: "",
   tanggalJatuhTempo: ""
 }

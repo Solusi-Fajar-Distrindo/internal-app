@@ -13,18 +13,6 @@ export function NextActionSection({ formData, setFormData }: FormSectionProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="nextAction">Tindakan Lanjutan</Label>
-        <Input
-          id="nextAction"
-          type="text"
-          placeholder="Masukkan tindakan lanjutan"
-          value={formData.nextAction}
-          onChange={(e) => setFormData({ ...formData, nextAction: e.target.value })}
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
         <Label htmlFor="tugasLanjutan">Tugas Lanjutan</Label>
         <textarea
           id="tugasLanjutan"

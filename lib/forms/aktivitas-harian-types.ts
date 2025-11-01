@@ -67,7 +67,6 @@ export interface AktivitasHarianFormData {
   competitorDisebut: string
   merekModelKompetitor: string
   hargaKompetitor: string
-  nextAction: string
   tugasLanjutan: string
   tanggalJatuhTempo: string
 }
