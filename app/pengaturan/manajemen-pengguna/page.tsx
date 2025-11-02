@@ -170,19 +170,28 @@ export default function ManajemenPenggunaPage() {
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', userId)
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+      })
 
-      if (error) {
-        console.error('Error soft deleting user:', error)
-      } else {
-        // Remove the user from the local state
-        setUsers(prev => prev.filter(user => user.id !== userId))
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('Error deleting user:', result.error)
+        // You might want to show a toast notification here
+        return
       }
+
+      console.log('User deleted successfully:', result)
+
+      // Remove the user from the local state
+      setUsers(prev => prev.filter(user => user.id !== userId))
+
+      // You might want to show a success toast notification here
+
     } catch (error) {
       console.error('Error:', error)
+      // You might want to show an error toast notification here
     }
   }
 

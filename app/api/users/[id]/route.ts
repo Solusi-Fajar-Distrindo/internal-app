@@ -221,3 +221,98 @@ export async function PATCH(
     )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // Verify the current user is authenticated and has proper role
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    if (!['backoffice', 'superuser'].includes(user.user_metadata.role)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      )
+    }
+
+    const { id: userId } = await params
+
+    // Get the target user to check current role and permissions
+    const adminClient = createAdminClient()
+    const { data: targetUser, error: fetchError } = await adminClient
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .is('deleted_at', null)
+      .single()
+
+    if (fetchError || !targetUser) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    // Business logic validation: role hierarchy
+    const currentUserRole = user.user_metadata.role
+    const targetUserRole = targetUser.role
+
+    // Backoffice users cannot delete superuser users
+    if (currentUserRole === 'backoffice' && targetUserRole === 'superuser') {
+      return NextResponse.json(
+        { error: 'Backoffice cannot delete superuser' },
+        { status: 403 }
+      )
+    }
+
+    // Users cannot delete themselves
+    if (user.id === userId) {
+      return NextResponse.json(
+        { error: 'Cannot delete your own account' },
+        { status: 403 }
+      )
+    }
+
+    // Perform soft delete by setting deleted_at timestamp
+    const { error: deleteError } = await adminClient
+      .from('users')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', userId)
+
+    if (deleteError) {
+      console.error('Error soft deleting user:', deleteError)
+      return NextResponse.json(
+        { error: 'Failed to delete user' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'User deleted successfully',
+      user: {
+        id: targetUser.id,
+        nama: targetUser.nama,
+        email: targetUser.email,
+        role: targetUser.role
+      }
+    })
+
+  } catch (error) {
+    console.error('Error in DELETE /api/users/[id]:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
