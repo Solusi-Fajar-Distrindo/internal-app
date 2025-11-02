@@ -110,8 +110,6 @@ export default function ManajemenPenggunaPage() {
         return
       }
 
-      console.log('User added successfully:', result)
-
       // Refresh the users list to show the newly created user
       try {
         const response = await fetch('/api/users?sortBy=created_at&sortOrder=desc')
@@ -136,27 +134,37 @@ export default function ManajemenPenggunaPage() {
 
   const handleUpdateUser = async (updatedUser: User) => {
     try {
-      const { error } = await supabase
-        .from('users')
-        .update({
+      const response = await fetch(`/api/users/${updatedUser.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           nama: updatedUser.nama,
           email: updatedUser.email,
           role: updatedUser.role,
           signature_image_url: updatedUser.signature_image_url,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', updatedUser.id)
+        }),
+      })
 
-      if (error) {
-        console.error('Error updating user:', error)
-      } else {
-        // Update the user in the local state
-        setUsers(prev => prev.map(user =>
-          user.id === updatedUser.id ? { ...user, ...updatedUser } : user
-        ))
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error('Error updating user:', result.error)
+        // You might want to show a toast notification here
+        return
       }
+
+      // Update the user in the local state
+      setUsers(prev => prev.map(user =>
+        user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+      ))
+
+      // You might want to show a success toast notification here
+
     } catch (error) {
       console.error('Error:', error)
+      // You might want to show an error toast notification here
     }
   }
 
@@ -195,8 +203,6 @@ export default function ManajemenPenggunaPage() {
         // You might want to show a toast notification here
         return
       }
-
-      console.log('Multiple users result:', result)
 
       // Refresh the users list to show the newly created users
       try {
