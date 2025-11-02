@@ -29,6 +29,14 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
   const [isUploadingSignature, setIsUploadingSignature] = useState(false)
   const supabase = createClient()
 
+  // Debug: Log Supabase configuration
+  useEffect(() => {
+    if (isOpen) {
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing')
+      console.log('Supabase Key:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'Missing')
+    }
+  }, [isOpen])
+
   useEffect(() => {
     setEditedUser(user)
   }, [user])
@@ -49,6 +57,14 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
         const fileExt = file.name.split('.').pop()
         const fileName = `signatures/${user.id}.${fileExt}`
 
+        // Debug information
+        console.log('Uploading signature:', {
+          fileName,
+          fileSize: file.size,
+          fileType: file.type,
+          userId: user.id
+        })
+
         // Upload to Supabase Storage
         const { error: uploadError } = await supabase.storage
           .from('signatures')
@@ -59,6 +75,9 @@ export function EditUserDialog({ user, onUpdateUser, trigger }: EditUserDialogPr
 
         if (uploadError) {
           console.error('Error uploading signature:', uploadError)
+          console.error('Upload error details:', JSON.stringify(uploadError, null, 2))
+          // Show user-friendly error
+          alert(`Gagal mengunggah tanda tangan: ${uploadError.message}`)
           return
         }
 
