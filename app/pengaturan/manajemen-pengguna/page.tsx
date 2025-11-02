@@ -66,22 +66,19 @@ export default function ManajemenPenggunaPage() {
     checkAuthorization()
   }, [supabase, router])
 
-  // Fetch users from Supabase
+  // Fetch users from API
   useEffect(() => {
     if (!authorized) return
 
     const fetchUsers = async () => {
       try {
-        const { data, error } = await supabase
-          .from('users')
-          .select('*')
-          .is('deleted_at', null)
-          .order('created_at', { ascending: false })
+        const response = await fetch('/api/users?sortBy=created_at&sortOrder=desc')
+        const result = await response.json()
 
-        if (error) {
-          console.error('Error fetching users:', error)
+        if (!response.ok) {
+          console.error('Error fetching users:', result.error)
         } else {
-          setUsers(data || [])
+          setUsers(result.data || [])
         }
       } catch (error) {
         console.error('Error:', error)
@@ -91,7 +88,7 @@ export default function ManajemenPenggunaPage() {
     }
 
     fetchUsers()
-  }, [supabase, authorized])
+  }, [authorized])
 
 
 
@@ -116,16 +113,17 @@ export default function ManajemenPenggunaPage() {
       console.log('User added successfully:', result)
 
       // Refresh the users list to show the newly created user
-      const { data: updatedUsers, error } = await supabase
-        .from('users')
-        .select('*')
-        .is('deleted_at', null)
-        .order('created_at', { ascending: false })
+      try {
+        const response = await fetch('/api/users?sortBy=created_at&sortOrder=desc')
+        const refreshResult = await response.json()
 
-      if (error) {
+        if (response.ok) {
+          setUsers(refreshResult.data || [])
+        } else {
+          console.error('Error refreshing users:', refreshResult.error)
+        }
+      } catch (error) {
         console.error('Error refreshing users:', error)
-      } else {
-        setUsers(updatedUsers || [])
       }
 
   // You might want to show a success toast notification here
@@ -201,16 +199,17 @@ export default function ManajemenPenggunaPage() {
       console.log('Multiple users result:', result)
 
       // Refresh the users list to show the newly created users
-      const { data: updatedUsers, error } = await supabase
-        .from('users')
-        .select('*')
-        .is('deleted_at', null)
-        .order('created_at', { ascending: false })
+      try {
+        const response = await fetch('/api/users?sortBy=created_at&sortOrder=desc')
+        const refreshResult = await response.json()
 
-      if (error) {
+        if (response.ok) {
+          setUsers(refreshResult.data || [])
+        } else {
+          console.error('Error refreshing users:', refreshResult.error)
+        }
+      } catch (error) {
         console.error('Error refreshing users:', error)
-      } else {
-        setUsers(updatedUsers || [])
       }
 
       // You might want to show a success toast notification here

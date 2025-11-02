@@ -2,6 +2,28 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Types for API responses
+interface UserResponse {
+  id: string
+  nama: string
+  email: string
+  role: 'lapangan' | 'backoffice' | 'superuser'
+  signature_image_url?: string
+  created_at?: string
+  updated_at?: string
+}
+
+interface UsersListResponse {
+  success: boolean
+  data: UserResponse[]
+  pagination?: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
+
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -21,6 +43,110 @@ const validateNama = (nama: string): boolean => {
   ]
   
   return !dangerousPatterns.some(pattern => pattern.test(nama))
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify the current user is authenticated and has proper role
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    if (!['backoffice', 'superuser'].includes(user.user_metadata.role)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      )
+    }
+
+    // Parse query parameters for pagination and filtering
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const search = searchParams.get('search') || ''
+    const role = searchParams.get('role') || ''
+    const sortBy = searchParams.get('sortBy') || 'created_at'
+    const sortOrder = searchParams.get('sortOrder') || 'desc'
+
+    // Validate pagination parameters
+    const validLimit = Math.min(Math.max(limit, 1), 100) // Max 100 items per page
+    const validPage = Math.max(page, 1)
+    const offset = (validPage - 1) * validLimit
+
+    // Build query
+    let query = supabase
+      .from('users')
+      .select('*', { count: 'exact' })
+      .is('deleted_at', null) // Only get non-deleted users
+
+    // Apply search filter (search by nama or email)
+    if (search) {
+      query = query.or(`nama.ilike.%${search}%,email.ilike.%${search}%`)
+    }
+
+    // Apply role filter
+    if (role && ['lapangan', 'backoffice', 'superuser'].includes(role)) {
+      query = query.eq('role', role)
+    }
+
+    // Apply sorting
+    const validSortFields = ['nama', 'email', 'role', 'created_at', 'updated_at']
+    const validSortField = validSortFields.includes(sortBy) ? sortBy : 'created_at'
+    const validSortOrder = ['asc', 'desc'].includes(sortOrder) ? sortOrder : 'desc'
+    
+    query = query.order(validSortField, { ascending: validSortOrder === 'asc' })
+
+    // Apply pagination
+    query = query.range(offset, offset + validLimit - 1)
+
+    const { data: users, error, count } = await query
+
+    if (error) {
+      console.error('Error fetching users:', error)
+      return NextResponse.json(
+        { error: 'Failed to fetch users' },
+        { status: 500 }
+      )
+    }
+
+    // Transform data to match UserResponse interface
+    const transformedUsers: UserResponse[] = (users || []).map(user => ({
+      id: user.id,
+      nama: user.nama,
+      email: user.email,
+      role: user.role,
+      signature_image_url: user.signature_image_url,
+      created_at: user.created_at,
+      updated_at: user.updated_at
+    }))
+
+    // Build response with pagination
+    const response: UsersListResponse = {
+      success: true,
+      data: transformedUsers,
+      pagination: {
+        page: validPage,
+        limit: validLimit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / validLimit)
+      }
+    }
+
+    return NextResponse.json(response)
+
+  } catch (error) {
+    console.error('Error in GET /api/users:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
 }
 
 export async function POST(request: NextRequest) {
